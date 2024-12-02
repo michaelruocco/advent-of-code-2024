@@ -1,8 +1,8 @@
 package uk.co.mruoc.day1;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.co.mruoc.day1.FilePaths.EXAMPLE_PATH;
-import static uk.co.mruoc.day1.FilePaths.REAL_PATH;
+import static uk.co.mruoc.day1.LocationIdFilePaths.EXAMPLE_PATH;
+import static uk.co.mruoc.day1.LocationIdFilePaths.REAL_PATH;
 
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;

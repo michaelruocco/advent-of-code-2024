@@ -1,7 +1,7 @@
 package uk.co.mruoc.day1;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.co.mruoc.day1.FilePaths.EXAMPLE_PATH;
+import static uk.co.mruoc.day1.LocationIdFilePaths.EXAMPLE_PATH;
 
 import org.junit.jupiter.api.Test;
 

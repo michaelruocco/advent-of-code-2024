@@ -12,7 +12,7 @@ public class LocationIdsLoader {
                 .build();
     }
 
-    private Integer toId(String line, int index) {
+    private static Integer toId(String line, int index) {
         String[] parts = line.split("\\s+");
         return Integer.parseInt(parts[index]);
     }
