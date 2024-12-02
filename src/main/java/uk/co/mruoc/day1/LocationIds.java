@@ -1,5 +1,6 @@
 package uk.co.mruoc.day1;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.Builder;
@@ -24,7 +25,16 @@ public class LocationIds {
                 .build();
     }
 
+    public int calculateSimilarityScore() {
+        return one.stream().mapToInt(this::toSimilarityScore).sum();
+    }
+
     private LocationIdPair toPair(int index) {
         return new LocationIdPair(one.get(index), two.get(index));
+    }
+
+    private int toSimilarityScore(int id1) {
+        int frequency = Collections.frequency(two, id1);
+        return id1 * frequency;
     }
 }

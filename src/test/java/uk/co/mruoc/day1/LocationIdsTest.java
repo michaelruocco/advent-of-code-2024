@@ -36,4 +36,14 @@ class LocationIdsTest {
 
         assertThat(pairs).containsExactly(new LocationIdPair(1, 3), new LocationIdPair(2, 4));
     }
+
+    @Test
+    void shouldReturnSimilarityScore() {
+        LocationIds ids =
+                LocationIds.builder().one(List.of(1, 2)).two(List.of(1, 1, 1)).build();
+
+        int score = ids.calculateSimilarityScore();
+
+        assertThat(score).isEqualTo(3);
+    }
 }

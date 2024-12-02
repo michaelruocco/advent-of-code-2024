@@ -23,7 +23,21 @@ class Day1Test {
         assertThat(totalDistance).isEqualTo(expectedDistance);
     }
 
+    @ParameterizedTest
+    @MethodSource("filePathAndExpectedSimilarityScore")
+    void shouldCalculateSimilarityScoreCorrectly(String path, int expectedScore) {
+        LocationIds ids = loader.load(path);
+
+        int score = ids.calculateSimilarityScore();
+
+        assertThat(score).isEqualTo(expectedScore);
+    }
+
     private static Stream<Arguments> filePathAndExpectedDistance() {
         return Stream.of(Arguments.of(EXAMPLE_PATH, 11), Arguments.of(REAL_PATH, 2378066));
+    }
+
+    private static Stream<Arguments> filePathAndExpectedSimilarityScore() {
+        return Stream.of(Arguments.of(EXAMPLE_PATH, 31), Arguments.of(REAL_PATH, 18934359));
     }
 }
