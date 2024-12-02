@@ -5,21 +5,16 @@ import static uk.co.mruoc.day1.ExampleTestFile.PATH;
 
 import org.junit.jupiter.api.Test;
 
-class LocationIdsLoaderTest {
+class ExampleTest {
 
     private final LocationIdsLoader loader = new LocationIdsLoader();
 
     @Test
-    void shouldLoadLocationIdsOne() {
+    void shouldCalculateExampleCorrectly() {
         LocationIds ids = loader.load(PATH);
 
-        assertThat(ids.getOne()).containsExactly(3, 4, 2, 1, 3, 3);
-    }
+        int totalDistance = ids.sort().toPairs().calculateTotalDistance();
 
-    @Test
-    void shouldLoadLocationIdsTwo() {
-        LocationIds ids = loader.load(PATH);
-
-        assertThat(ids.getTwo()).containsExactly(4, 3, 5, 3, 9, 3);
+        assertThat(totalDistance).isEqualTo(11);
     }
 }

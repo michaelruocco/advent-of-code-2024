@@ -26,4 +26,14 @@ class LocationIdsTest {
 
         assertThat(sortedIds.getTwo()).containsExactly(7, 8, 9);
     }
+
+    @Test
+    void shouldConvertToIdPairs() {
+        LocationIds ids =
+                LocationIds.builder().one(List.of(1, 2)).two(List.of(3, 4)).build();
+
+        LocationIdPairs pairs = ids.toPairs();
+
+        assertThat(pairs).containsExactly(new LocationIdPair(1, 3), new LocationIdPair(2, 4));
+    }
 }
