@@ -3,7 +3,7 @@ name: pipeline
 on:
   push:
     branches-ignore:
-      - 'library-template-*'
+      - 'advent-of-code-2024-*'
 
 permissions:
   checks: write
