@@ -23,6 +23,8 @@ class ReportTest {
 
     private static Stream<Arguments> levelsAndExpectedResult() {
         return Stream.of(
+                Arguments.of(List.of(), true),
+                Arguments.of(List.of(1), true),
                 Arguments.of(List.of(1, 4), true),
                 Arguments.of(List.of(4, 1), true),
                 Arguments.of(List.of(1, 5), false),
