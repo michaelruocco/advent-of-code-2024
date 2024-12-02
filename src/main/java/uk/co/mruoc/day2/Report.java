@@ -8,7 +8,7 @@ public class Report {
 
     private final Collection<Integer> levels;
 
-    public boolean isSafe() {
-        return SafetyCalculator.isSafe(levels);
+    public boolean isSafe(LevelSafetyPolicy policy) {
+        return policy.isSafe(levels);
     }
 }

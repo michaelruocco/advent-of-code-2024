@@ -8,7 +8,7 @@ public class Reports {
 
     private final Collection<Report> values;
 
-    public long getSafeCount() {
-        return values.stream().filter(Report::isSafe).count();
+    public long getSafeCount(LevelSafetyPolicy policy) {
+        return values.stream().filter(report -> report.isSafe(policy)).count();
     }
 }

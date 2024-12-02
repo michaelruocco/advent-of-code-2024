@@ -15,15 +15,19 @@ class Day2Test {
 
     @ParameterizedTest
     @MethodSource("filePathAndExpectedSafeCount")
-    void shouldCalculateDistanceCorrectly(String path, long expectedSafeCount) {
+    void shouldCalculateDistanceCorrectly(String path, LevelSafetyPolicy policy, long expectedSafeCount) {
         Reports reports = loader.load(path);
 
-        long safeCount = reports.getSafeCount();
+        long safeCount = reports.getSafeCount(policy);
 
         assertThat(safeCount).isEqualTo(expectedSafeCount);
     }
 
     private static Stream<Arguments> filePathAndExpectedSafeCount() {
-        return Stream.of(Arguments.of(EXAMPLE_PATH, 2), Arguments.of(REAL_PATH, 549));
+        return Stream.of(
+                Arguments.of(EXAMPLE_PATH, new StrictLevelSafetyPolicy(), 2),
+                Arguments.of(REAL_PATH, new StrictLevelSafetyPolicy(), 549),
+                Arguments.of(EXAMPLE_PATH, new DampenedLevelSafetyPolicy(), 4),
+                Arguments.of(REAL_PATH, new DampenedLevelSafetyPolicy(), 589));
     }
 }

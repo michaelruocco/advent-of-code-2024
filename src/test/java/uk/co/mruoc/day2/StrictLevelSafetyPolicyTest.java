@@ -9,14 +9,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class ReportTest {
+class StrictLevelSafetyPolicyTest {
 
     @ParameterizedTest
     @MethodSource("levelsAndExpectedResult")
     void shouldReturnReportSafetyResult(Collection<Integer> levels, boolean expectedResult) {
-        Report report = new Report(levels);
+        LevelSafetyPolicy policy = new StrictLevelSafetyPolicy();
 
-        boolean safe = report.isSafe();
+        boolean safe = policy.isSafe(levels);
 
         assertThat(safe).isEqualTo(expectedResult);
     }
@@ -27,6 +27,7 @@ class ReportTest {
                 Arguments.of(List.of(1), true),
                 Arguments.of(List.of(1, 4), true),
                 Arguments.of(List.of(4, 1), true),
+                Arguments.of(List.of(1, 1), false),
                 Arguments.of(List.of(1, 5), false),
                 Arguments.of(List.of(5, 1), false),
                 Arguments.of(List.of(1, 4, 3), false),
