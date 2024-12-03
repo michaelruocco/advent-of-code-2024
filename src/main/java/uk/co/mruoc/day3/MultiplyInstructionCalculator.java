@@ -21,10 +21,8 @@ public class MultiplyInstructionCalculator {
                 enabled = true;
             } else if (isDont(instruction)) {
                 enabled = false;
-            } else if (isMul(matcher)) {
-                if (enabled) {
-                    result += calculateMul(matcher);
-                }
+            } else if (isMul(matcher) && (enabled)) {
+                result += calculateMul(matcher);
             }
             currentIndex = matcher.end();
         }
