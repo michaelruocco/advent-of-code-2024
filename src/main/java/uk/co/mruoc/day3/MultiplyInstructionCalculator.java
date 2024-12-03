@@ -21,7 +21,7 @@ public class MultiplyInstructionCalculator {
                 enabled = true;
             } else if (isDont(instruction)) {
                 enabled = false;
-            } else if (isMul(matcher) && (enabled)) {
+            } else if (isMul(matcher) && enabled) {
                 result += calculateMul(matcher);
             }
             currentIndex = matcher.end();
@@ -31,11 +31,11 @@ public class MultiplyInstructionCalculator {
     }
 
     private static boolean isDo(String instruction) {
-        return instruction.matches("do\\(\\)");
+        return instruction.equals("do()");
     }
 
     private static boolean isDont(String instruction) {
-        return instruction.matches("don't\\(\\)");
+        return instruction.equals("don't()");
     }
 
     private static boolean isMul(Matcher matcher) {
