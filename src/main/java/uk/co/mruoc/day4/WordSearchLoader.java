@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import uk.co.mruoc.file.FileLoader;
 
 public class WordSearchLoader {
@@ -51,65 +52,65 @@ public class WordSearchLoader {
                 .toList();
     }
 
-    public static Collection<Line> toTopLeftToBottomRightDiagonals(int width, int height, List<Line> rows) {
-        Collection<Line> diagonals = new ArrayList<>();
-        List<Square> squares = new ArrayList<>();
-
-        for (int column = 0; column < width; column++) {
-            int x = column;
-            int y = 0;
-            while (x < width && y < rows.size()) {
-                squares.add(new Square(rows.get(x).charAt(y), new Point(x, y)));
-                x++;
-                y++;
-            }
-            diagonals.add(new Line(squares));
-            squares = new ArrayList<>();
-        }
-
-        for (int row = 1; row < height; row++) {
-            int x = 0;
-            int y = row;
-            while (x < width && y < height) {
-                squares.add(new Square(rows.get(x).charAt(y), new Point(x, y)));
-                x++;
-                y++;
-            }
-            diagonals.add(new Line(squares));
-            squares = new ArrayList<>();
-        }
-
-        return diagonals;
+    private static Collection<Line> toTopLeftToBottomRightDiagonals(int width, int height, List<Line> rows) {
+        return Stream.concat(
+                        toTopHalfTopLeftToBottomRightDiagonals(width, rows),
+                        toBottomHalfTopLeftToBottomRightDiagonals(width, height, rows))
+                .toList();
     }
 
-    public static Collection<Line> getTopRightToBottomLeftDiagonals(int width, int height, List<Line> rows) {
+    private static Stream<Line> toTopHalfTopLeftToBottomRightDiagonals(int width, List<Line> rows) {
         Collection<Line> diagonals = new ArrayList<>();
-        List<Square> squares = new ArrayList<>();
-
-        for (int column = width - 1; column >= 0; column--) {
-            int x = column;
-            int y = 0;
-            while (x >= 0 && y < height) {
+        for (int column = 0; column < width; column++) {
+            List<Square> squares = new ArrayList<>();
+            for (int x = column, y = 0; x < width && y < rows.size(); x++, y++) {
                 squares.add(new Square(rows.get(x).charAt(y), new Point(x, y)));
-                x--;
-                y++;
             }
             diagonals.add(new Line(squares));
-            squares = new ArrayList<>();
         }
+        return diagonals.stream();
+    }
 
+    private static Stream<Line> toBottomHalfTopLeftToBottomRightDiagonals(int width, int height, List<Line> rows) {
+        Collection<Line> diagonals = new ArrayList<>();
         for (int row = 1; row < height; row++) {
-            int x = width - 1;
-            int y = row;
-            while (x >= 0 && y < height) {
+            List<Square> squares = new ArrayList<>();
+            for (int x = 0, y = row; x < width && y < height; x++, y++) {
                 squares.add(new Square(rows.get(x).charAt(y), new Point(x, y)));
-                x--;
-                y++;
             }
             diagonals.add(new Line(squares));
-            squares = new ArrayList<>();
         }
+        return diagonals.stream();
+    }
 
-        return diagonals;
+    private static Collection<Line> getTopRightToBottomLeftDiagonals(int width, int height, List<Line> rows) {
+        return Stream.concat(
+                        toTopHalfTopRightToBottomLeftDiagonals(width, height, rows),
+                        toBottomHalfTopRightToBottomLeftDiagonals(width, height, rows))
+                .toList();
+    }
+
+    private static Stream<Line> toTopHalfTopRightToBottomLeftDiagonals(int width, int height, List<Line> rows) {
+        Collection<Line> diagonals = new ArrayList<>();
+        for (int column = width - 1; column >= 0; column--) {
+            List<Square> squares = new ArrayList<>();
+            for (int x = column, y = 0; x >= 0 && y < height; x--, y++) {
+                squares.add(new Square(rows.get(x).charAt(y), new Point(x, y)));
+            }
+            diagonals.add(new Line(squares));
+        }
+        return diagonals.stream();
+    }
+
+    private static Stream<Line> toBottomHalfTopRightToBottomLeftDiagonals(int width, int height, List<Line> rows) {
+        Collection<Line> diagonals = new ArrayList<>();
+        for (int row = 1; row < height; row++) {
+            List<Square> squares = new ArrayList<>();
+            for (int x = width - 1, y = row; x >= 0 && y < height; x--, y++) {
+                squares.add(new Square(rows.get(x).charAt(y), new Point(x, y)));
+            }
+            diagonals.add(new Line(squares));
+        }
+        return diagonals.stream();
     }
 }
