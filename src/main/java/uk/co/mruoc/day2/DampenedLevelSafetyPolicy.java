@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -19,13 +20,11 @@ public class DampenedLevelSafetyPolicy implements LevelSafetyPolicy {
         if (levels.isEmpty()) {
             return true;
         }
-        return dampen(levels).stream().anyMatch(policy::isSafe);
+        return dampen(levels).anyMatch(policy::isSafe);
     }
 
-    private Collection<Collection<Integer>> dampen(Collection<Integer> levels) {
-        return IntStream.range(0, levels.size())
-                .mapToObj(i -> remove(levels, i))
-                .toList();
+    private Stream<Collection<Integer>> dampen(Collection<Integer> levels) {
+        return IntStream.range(0, levels.size()).mapToObj(i -> remove(levels, i));
     }
 
     private static Collection<Integer> remove(Collection<Integer> levels, int index) {

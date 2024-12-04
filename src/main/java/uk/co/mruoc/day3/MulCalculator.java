@@ -3,7 +3,7 @@ package uk.co.mruoc.day3;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultiplyInstructionCalculator {
+public class MulCalculator {
 
     private static final String REGEX = "mul\\((\\d{1,3}),(\\d{1,3})\\)|(do\\(\\))|(don't\\(\\))";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
