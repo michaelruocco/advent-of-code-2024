@@ -1,0 +1,32 @@
+package uk.co.mruoc.day5;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public class Page {
+
+    private final List<Integer> numbers;
+
+    public Page(Integer... numbers) {
+        this(List.of(numbers));
+    }
+
+    public Stream<Integer> stream() {
+        return numbers.stream();
+    }
+
+    public Collection<Integer> getPagesBefore(int number) {
+        return numbers.subList(0, numbers.indexOf(number));
+    }
+
+    public Collection<Integer> getPagesAfter(int number) {
+        return numbers.subList(numbers.indexOf(number) + 1, numbers.size());
+    }
+
+    public Integer getMiddleNumber() {
+        return numbers.get(numbers.size() / 2);
+    }
+}
