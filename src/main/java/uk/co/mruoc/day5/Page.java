@@ -1,17 +1,23 @@
 package uk.co.mruoc.day5;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class Page {
+public class Page implements Iterable<Integer> {
 
     private final List<Integer> numbers;
 
     public Page(Integer... numbers) {
         this(List.of(numbers));
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return numbers.iterator();
     }
 
     public Stream<Integer> stream() {
@@ -28,5 +34,9 @@ public class Page {
 
     public Integer getMiddleNumber() {
         return numbers.get(numbers.size() / 2);
+    }
+
+    public Page correct(PageRules rules) {
+        return new Page(stream().sorted(rules).toList());
     }
 }

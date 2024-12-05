@@ -9,6 +9,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class Day4Test {
 
+    private static final String EXAMPLE_PATH = "day-4/example-word-search.txt";
+    private static final String PATH = "day-4/word-search.txt";
+
     private final WordSearchLoader loader = new WordSearchLoader();
 
     @ParameterizedTest
@@ -33,16 +36,14 @@ class Day4Test {
 
     private static Stream<Arguments> pathAndWordAndExpectedResult() {
         String target = "XMAS";
-        return Stream.of(
-                Arguments.of("day-4/example-word-search.txt", target, 18),
-                Arguments.of("day-4/word-search.txt", target, 2344));
+        return Stream.of(Arguments.of(EXAMPLE_PATH, target, 18), Arguments.of(PATH, target, 2344));
     }
 
     private static Stream<Arguments> pathAndWordAndExpectedInXResult() {
         String target = "MAS";
         return Stream.of(
                 Arguments.of("day-4/simple-x-word-search.txt", target, 1),
-                Arguments.of("day-4/example-word-search.txt", target, 9),
-                Arguments.of("day-4/word-search.txt", target, 1815));
+                Arguments.of(EXAMPLE_PATH, target, 9),
+                Arguments.of(PATH, target, 1815));
     }
 }

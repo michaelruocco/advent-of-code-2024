@@ -1,13 +1,14 @@
 package uk.co.mruoc.day5;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class PageRules {
+public class PageRules implements Comparator<Integer> {
 
     private final Map<Integer, PageRule> rules;
 
@@ -58,5 +59,17 @@ public class PageRules {
             rule.addBefore(before);
             rules.put(after, rule);
         }
+    }
+
+    @Override
+    public int compare(Integer i1, Integer i2) {
+        PageRule rule = rules.get(i1);
+        if (rule.isBefore(i2)) {
+            return 1;
+        }
+        if (rule.isAfter(i2)) {
+            return -1;
+        }
+        return 0;
     }
 }
