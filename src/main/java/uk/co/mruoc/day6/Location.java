@@ -15,6 +15,7 @@ public class Location {
     private static final char AVAILABLE = '.';
     private static final char OBSTRUCTION = '#';
     private static final char VISITED = 'X';
+    private static final char ADDED_OBSTRUCTION = 'O';
 
     private final Point point;
 
@@ -35,5 +36,9 @@ public class Location {
 
     public Location toVisited() {
         return withToken(VISITED);
+    }
+
+    public Location addObstruction() {
+        return withToken(ADDED_OBSTRUCTION);
     }
 }

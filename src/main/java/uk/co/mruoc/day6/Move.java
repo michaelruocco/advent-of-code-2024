@@ -12,4 +12,6 @@ public class Move {
     private final Location previous;
     private final Location next;
     private final char direction;
+    private final boolean complete;
+    private final boolean stuck;
 }
