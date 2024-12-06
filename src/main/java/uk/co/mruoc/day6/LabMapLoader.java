@@ -23,6 +23,7 @@ public class LabMapLoader {
                 .size(size)
                 .guard(new Guard(toGuardLocation(locations)))
                 .locations(toMap(locations))
+                .previousLocations(new ArrayList<>())
                 .build();
     }
 

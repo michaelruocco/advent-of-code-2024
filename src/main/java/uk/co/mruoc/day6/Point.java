@@ -1,10 +1,12 @@
 package uk.co.mruoc.day6;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 @Builder
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Point {
 
     final int x;

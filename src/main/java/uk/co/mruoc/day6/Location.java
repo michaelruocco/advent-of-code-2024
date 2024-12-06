@@ -2,12 +2,14 @@ package uk.co.mruoc.day6;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.With;
 
 @AllArgsConstructor
 @Builder
 @Getter
+@EqualsAndHashCode
 public class Location {
 
     private static final char AVAILABLE = '.';
