@@ -35,8 +35,4 @@ public class Page implements Iterable<Integer> {
     public Integer getMiddleNumber() {
         return numbers.get(numbers.size() / 2);
     }
-
-    public Page correct(PageRules rules) {
-        return new Page(stream().sorted(rules).toList());
-    }
 }

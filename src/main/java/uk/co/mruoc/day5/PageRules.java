@@ -29,6 +29,10 @@ public class PageRules implements Comparator<Integer> {
         return page.stream().allMatch(number -> rules.get(number).isCorrectlyOrdered(page, number));
     }
 
+    public Page correct(Page page) {
+        return new Page(page.stream().sorted(this).toList());
+    }
+
     private void add(String rule) {
         String[] parts = rule.split("\\|");
         int before = Integer.parseInt(parts[0]);

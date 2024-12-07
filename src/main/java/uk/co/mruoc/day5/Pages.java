@@ -20,7 +20,7 @@ public class Pages {
     }
 
     public Pages correct(PageRules rules) {
-        return new Pages(values.stream().map(page -> page.correct(rules)).toList());
+        return new Pages(values.stream().map(rules::correct).toList());
     }
 
     public Integer getMiddlePageSum() {

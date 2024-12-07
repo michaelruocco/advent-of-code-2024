@@ -56,7 +56,7 @@ class PageRulesTest {
                 "97|13", "97|47", "97|29", "29|13", "47|13", "75|13", "75|29", "75|47", "75|13", "47|29", "47|13");
         Page page = new Page(97, 13, 75, 29, 47);
 
-        Page corrected = page.correct(rules);
+        Page corrected = rules.correct(page);
 
         assertThat(corrected).containsExactly(97, 75, 47, 29, 13);
     }
