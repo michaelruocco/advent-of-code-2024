@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class Step {
 
-    private final LabMap.Location location;
+    private final Location location;
     private final char direction;
 }

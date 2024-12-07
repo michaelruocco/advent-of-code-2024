@@ -4,15 +4,17 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class Page implements Iterable<Integer> {
 
     private final List<Integer> numbers;
 
     public Page(Integer... numbers) {
         this(List.of(numbers));
+    }
+
+    public Page(List<Integer> numbers) {
+        this.numbers = numbers;
     }
 
     @Override

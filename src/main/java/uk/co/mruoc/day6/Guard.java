@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import uk.co.mruoc.day6.LabMap.Location;
 
 @RequiredArgsConstructor
 public class Guard {

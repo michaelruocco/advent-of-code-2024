@@ -9,9 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 @RequiredArgsConstructor
 public class LabMap {
@@ -137,29 +135,5 @@ public class LabMap {
 
     private static char[][] deepCopy(char[][] matrix) {
         return Arrays.stream(matrix).map(char[]::clone).toArray(a -> matrix.clone());
-    }
-
-    @RequiredArgsConstructor
-    @EqualsAndHashCode
-    @ToString
-    public static class Location {
-        final int y;
-        final int x;
-
-        public Location north() {
-            return new Location(y - 1, x);
-        }
-
-        public Location east() {
-            return new Location(y, x + 1);
-        }
-
-        public Location south() {
-            return new Location(y + 1, x);
-        }
-
-        public Location west() {
-            return new Location(y, x - 1);
-        }
     }
 }
