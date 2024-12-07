@@ -1,9 +1,5 @@
 package uk.co.mruoc.day6;
 
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,6 +9,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
 public class LabMap {
@@ -28,77 +27,79 @@ public class LabMap {
         this(tokens, deepCopy(tokens));
     }
 
-    public int countSingleObstructionsCausingLoop() {
-        Guard guard = new Guard(this);
-        guard.patrol();
-        int count = 0;
-        List<LabMap.Point> locations = new ArrayList<>(this.getVisitedLocations());
-        for (Point location : locations) {
-            this.reset();
-            if (this.isAvailable(location)) {
-                this.addObstruction(location);
-                guard = new Guard(this);
-                guard.patrol();
-                if (guard.isStuck()) {
-                    count++;
-                }
-            }
-        }
-        return count;
+    public long countSingleObstructionsCausingLoop() {
+        performPatrol();
+        return getVisitedLocations().filter(this::isStuckWhenObstructionAdded).count();
     }
 
-    public void visited(Point point) {
-        setToken(point.y, point.x, VISITED);
+    private boolean isStuckWhenObstructionAdded(Location location) {
+        reset();
+        if (!isAvailable(location)) {
+            return false;
+        }
+        addObstruction(location);
+        Guard guard = performPatrol();
+        return guard.isStuck();
+    }
+
+    private Guard performPatrol() {
+        Guard guard = new Guard(this);
+        guard.patrol();
+        return guard;
+    }
+
+    public void visited(Location location) {
+        setToken(location.y, location.x, VISITED);
     }
 
     public void update(Guard guard) {
-        Point point = guard.getLocation();
-        setToken(point.y, point.x, guard.getDirection());
+        Location location = guard.getLocation();
+        setToken(location.y, location.x, guard.getDirection());
     }
 
-    public void addObstruction(Point point) {
-        if (isAvailable(point)) {
-            setToken(point.y, point.x, ADDED_OBSTRUCTION);
+    public void addObstruction(Location location) {
+        if (isAvailable(location)) {
+            setToken(location.y, location.x, ADDED_OBSTRUCTION);
         }
     }
 
-    public boolean exists(Point point) {
-        return point.y > -1 &&
-                point.y < tokens.length &&
-                point.x > -1 &&
-                point.x < tokens[point.y].length;
+    public boolean exists(Location location) {
+        return location.y > -1
+                && location.y < tokens.length
+                && location.x > -1
+                && location.x < tokens[location.y].length;
     }
 
-    public boolean isAvailable(Point point) {
-        return List.of(AVAILABLE, VISITED).contains(getToken(point.y, point.x));
+    public boolean isAvailable(Location location) {
+        return List.of(AVAILABLE, VISITED).contains(getToken(location.y, location.x));
     }
 
     public long countVisitedLocations() {
-        return getVisitedLocations().size();
+        return getVisitedLocations().count();
     }
 
-    public Collection<Point> getVisitedLocations() {
-        return findAll(this::isVisited).toList();
+    public Stream<Location> getVisitedLocations() {
+        return findAll(this::isVisited);
     }
 
-    public Optional<Point> find(Predicate<Character> predicate) {
+    public Optional<Location> find(Predicate<Character> predicate) {
         return findAll(predicate).findFirst();
     }
 
-    public Stream<Point> findAll(Predicate<Character> predicate) {
-        Collection<Point> points = new ArrayList<>();
+    public Stream<Location> findAll(Predicate<Character> predicate) {
+        Collection<Location> locations = new ArrayList<>();
         for (int y = 0; y < tokens.length; y++) {
             for (int x = 0; x < tokens[y].length; x++) {
                 if (predicate.test(getToken(y, x))) {
-                    points.add(new Point(y, x));
+                    locations.add(new Location(y, x));
                 }
             }
         }
-        return points.stream();
+        return locations.stream();
     }
 
-    public char getToken(Point point) {
-        return getToken(point.y, point.x);
+    public char getToken(Location location) {
+        return getToken(location.y, location.x);
     }
 
     public String getState() {
@@ -116,8 +117,7 @@ public class LabMap {
     }
 
     private void resetRow(int y) {
-        IntStream.range(0, tokens[y].length)
-                .forEach(x -> tokens[y][x] = originalTokens[y][x]);
+        IntStream.range(0, tokens[y].length).forEach(x -> tokens[y][x] = originalTokens[y][x]);
     }
 
     private String formatRow(int y) {
@@ -142,24 +142,24 @@ public class LabMap {
     @RequiredArgsConstructor
     @EqualsAndHashCode
     @ToString
-    public static class Point {
+    public static class Location {
         final int y;
         final int x;
 
-        public Point north() {
-            return new Point(y - 1, x);
+        public Location north() {
+            return new Location(y - 1, x);
         }
 
-        public Point east() {
-            return new Point(y, x + 1);
+        public Location east() {
+            return new Location(y, x + 1);
         }
 
-        public Point south() {
-            return new Point(y + 1, x);
+        public Location south() {
+            return new Location(y + 1, x);
         }
 
-        public Point west() {
-            return new Point(y, x - 1);
+        public Location west() {
+            return new Location(y, x - 1);
         }
     }
 }

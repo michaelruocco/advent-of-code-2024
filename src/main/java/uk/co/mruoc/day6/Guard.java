@@ -1,13 +1,12 @@
 package uk.co.mruoc.day6;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import uk.co.mruoc.day6.LabMap.Point;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.day6.LabMap.Location;
 
 @RequiredArgsConstructor
 public class Guard {
@@ -24,8 +23,10 @@ public class Guard {
 
     @Getter
     private char direction;
+
     @Getter
-    private Point location;
+    private Location location;
+
     @Getter
     private boolean stuck;
 
@@ -41,7 +42,6 @@ public class Guard {
             performPatrol();
         } catch (IsStuckException e) {
             stuck = true;
-            System.err.println(e.getMessage());
         }
     }
 
@@ -55,13 +55,13 @@ public class Guard {
     private void move() {
         recordMove();
         rotateUntilCanMove();
-        this.location = nextLocation();
+        location = nextLocation();
         map.update(this);
     }
 
     private void recordMove() {
-        Step step = new Step(location, direction);
         map.visited(location);
+        Step step = new Step(location, direction);
         if (path.contains(step)) {
             throw new IsStuckException(step);
         }
@@ -69,10 +69,8 @@ public class Guard {
     }
 
     private void rotateUntilCanMove() {
-        Point candidateLocation = nextLocation();
-        while (!map.isAvailable(candidateLocation)) {
+        while (!map.isAvailable(nextLocation())) {
             rotate();
-            candidateLocation = nextLocation();
         }
     }
 
@@ -84,11 +82,11 @@ public class Guard {
         return getPath().size();
     }
 
-    public Collection<Point> getPath() {
+    public Collection<Location> getPath() {
         return path.stream().map(Step::getLocation).distinct().toList();
     }
 
-    private Point nextLocation() {
+    private Location nextLocation() {
         return switch (direction) {
             case NORTH -> location.north();
             case EAST -> location.east();

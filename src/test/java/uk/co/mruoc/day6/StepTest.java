@@ -1,17 +1,16 @@
 package uk.co.mruoc.day6;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 class StepTest {
 
     @Test
     void shouldReturnTrueIfHaveSameValues() {
-        Step step1 = new Step(new LabMap.Point(87, 110), '^');
-        Step step2 = new Step(new LabMap.Point(87, 110), '^');
+        Step step1 = new Step(new LabMap.Location(87, 110), '^');
+        Step step2 = new Step(new LabMap.Location(87, 110), '^');
 
         boolean equal = step1.equals(step2);
 
@@ -20,8 +19,8 @@ class StepTest {
 
     @Test
     void shouldReturnTrueListContainsStepWithSameValues() {
-        Step step1 = new Step(new LabMap.Point(87, 110), '^');
-        Step step2 = new Step(new LabMap.Point(87, 110), '^');
+        Step step1 = new Step(new LabMap.Location(87, 110), '^');
+        Step step2 = new Step(new LabMap.Location(87, 110), '^');
 
         boolean contains = List.of(step1).contains(step2);
 

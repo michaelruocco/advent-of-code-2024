@@ -3,11 +3,7 @@ package uk.co.mruoc.day6;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.co.mruoc.file.FileLoader.loadContentFromClasspath;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -50,7 +46,7 @@ class Day6Test {
     void shouldCountAllSingleObstructionsCausingALoop(String path, long expectedLoopObstructionCount) {
         LabMap map = loader.loadMap(path);
 
-        int count = map.countSingleObstructionsCausingLoop();
+        long count = map.countSingleObstructionsCausingLoop();
 
         assertThat(count).isEqualTo(expectedLoopObstructionCount);
     }
@@ -63,7 +59,6 @@ class Day6Test {
                 Arguments.of(EXAMPLE_LOOP_2_PATH, 26));
     }
 
-
     private static Stream<Arguments> pathAndExpectedState() {
         return Stream.of(
                 Arguments.of(EXAMPLE_PATH, loadContentFromClasspath("day-6/example-map-final.txt")),
@@ -72,9 +67,6 @@ class Day6Test {
     }
 
     private static Stream<Arguments> pathAndExpectedLoopObstructionCount() {
-        return Stream.of(
-                Arguments.of(EXAMPLE_PATH, 6L),
-                Arguments.of(MAP_PATH, 1434L)
-        );
+        return Stream.of(Arguments.of(EXAMPLE_PATH, 6L), Arguments.of(MAP_PATH, 1434L));
     }
 }
