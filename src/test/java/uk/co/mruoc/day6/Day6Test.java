@@ -3,7 +3,11 @@ package uk.co.mruoc.day6;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.co.mruoc.file.FileLoader.loadContentFromClasspath;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,42 +23,46 @@ class Day6Test {
     private final LabMapLoader loader = new LabMapLoader();
 
     @ParameterizedTest
-    @MethodSource("pathAndExpectedVisitedPositionCount")
-    void shouldCountMapPositionsVisitedByGuard(String path, int expectedVisitedPositionCount) {
-        LabMap initialMap = loader.loadMap(path);
+    @MethodSource("pathAndExpectedVisitedLocationCount")
+    void shouldCountMapPositionsVisitedByGuard(String path, int expectedVisitedLocationCount) {
+        LabMap map = loader.loadMap(path);
+        Guard guard = new Guard(map);
 
-        LabMap completeMap = initialMap.performPatrol();
+        guard.patrol();
 
-        assertThat(completeMap.countVisitedPositions()).isEqualTo(expectedVisitedPositionCount);
+        assertThat(guard.getPathSize()).isEqualTo(expectedVisitedLocationCount);
+        assertThat(map.countVisitedLocations()).isEqualTo(expectedVisitedLocationCount);
     }
 
     @ParameterizedTest
     @MethodSource("pathAndExpectedState")
     void shouldRecordPathCorrectly(String path, String expectedState) {
-        LabMap initialMap = loader.loadMap(path);
+        LabMap map = loader.loadMap(path);
+        Guard guard = new Guard(map);
 
-        LabMap completeMap = initialMap.performPatrol();
+        guard.patrol();
 
-        assertThat(completeMap.getState()).isEqualTo(expectedState);
+        assertThat(map.getState()).isEqualTo(expectedState);
     }
 
     @ParameterizedTest
     @MethodSource("pathAndExpectedLoopObstructionCount")
     void shouldCountAllSingleObstructionsCausingALoop(String path, long expectedLoopObstructionCount) {
-        LabMap initialMap = loader.loadMap(path);
+        LabMap map = loader.loadMap(path);
 
-        long count = initialMap.getLoopObstructionCount();
+        int count = map.countSingleObstructionsCausingLoop();
 
         assertThat(count).isEqualTo(expectedLoopObstructionCount);
     }
 
-    private static Stream<Arguments> pathAndExpectedVisitedPositionCount() {
+    private static Stream<Arguments> pathAndExpectedVisitedLocationCount() {
         return Stream.of(
                 Arguments.of(EXAMPLE_PATH, 41),
                 Arguments.of(MAP_PATH, 4939),
                 Arguments.of(EXAMPLE_LOOP_1_PATH, 18),
                 Arguments.of(EXAMPLE_LOOP_2_PATH, 26));
     }
+
 
     private static Stream<Arguments> pathAndExpectedState() {
         return Stream.of(
@@ -64,6 +72,9 @@ class Day6Test {
     }
 
     private static Stream<Arguments> pathAndExpectedLoopObstructionCount() {
-        return Stream.of(Arguments.of(EXAMPLE_PATH, 6L) /*, Arguments.of(MAP_PATH, 1434L)*/);
+        return Stream.of(
+                Arguments.of(EXAMPLE_PATH, 6L),
+                Arguments.of(MAP_PATH, 1434L)
+        );
     }
 }

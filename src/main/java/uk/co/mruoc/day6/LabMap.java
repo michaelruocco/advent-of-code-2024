@@ -1,145 +1,165 @@
 package uk.co.mruoc.day6;
 
-import java.time.Duration;
-import java.time.Instant;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.With;
+import java.util.stream.Stream;
 
-@Builder(toBuilder = true)
+@RequiredArgsConstructor
 public class LabMap {
 
-    private static int count;
+    private static final char AVAILABLE = '.';
+    private static final char VISITED = 'X';
+    private static final char ADDED_OBSTRUCTION = 'O';
 
-    private final int size;
+    private final char[][] tokens;
+    private final char[][] originalTokens;
 
-    @With(AccessLevel.PRIVATE)
-    private final Map<String, Location> locations;
-
-    private final Guard guard;
-    private final Collection<Location> previousLocations;
-
-    @With(AccessLevel.PRIVATE)
-    @Getter
-    private final boolean stuck;
-
-    public long getLoopObstructionCount() {
-        Collection<Location> visitedLocations = performPatrol().getVisitedLocations();
-        return visitedLocations.stream()
-                .map(Location::addObstruction)
-                .map(obstructedLocation -> this.withLocations(updateLocations(obstructedLocation)))
-                .map(LabMap::performPatrol)
-                .filter(LabMap::isStuck)
-                .count();
+    public LabMap(char[][] tokens) {
+        this(tokens, deepCopy(tokens));
     }
 
-    public LabMap performPatrol() {
-        Instant start = Instant.now();
-        LabMap map = this;
-        Move nextMove = calculateNextMove();
-        while (!nextMove.isComplete()) {
-            map = map.perform(nextMove);
-            nextMove = map.calculateNextMove();
+    public int countSingleObstructionsCausingLoop() {
+        Guard guard = new Guard(this);
+        guard.patrol();
+        int count = 0;
+        List<LabMap.Point> locations = new ArrayList<>(this.getVisitedLocations());
+        for (Point location : locations) {
+            this.reset();
+            if (this.isAvailable(location)) {
+                this.addObstruction(location);
+                guard = new Guard(this);
+                guard.patrol();
+                if (guard.isStuck()) {
+                    count++;
+                }
+            }
         }
-        LabMap completedMap = map.performLastMove(nextMove);
-        System.out.println("patrol took " + Duration.between(start, Instant.now()) + " for patrol " + count);
-        count++;
-        return completedMap;
+        return count;
     }
 
-    public long countVisitedPositions() {
-        return locations.values().stream().filter(Location::isVisited).count();
+    public void visited(Point point) {
+        setToken(point.y, point.x, VISITED);
+    }
+
+    public void update(Guard guard) {
+        Point point = guard.getLocation();
+        setToken(point.y, point.x, guard.getDirection());
+    }
+
+    public void addObstruction(Point point) {
+        if (isAvailable(point)) {
+            setToken(point.y, point.x, ADDED_OBSTRUCTION);
+        }
+    }
+
+    public boolean exists(Point point) {
+        return point.y > -1 &&
+                point.y < tokens.length &&
+                point.x > -1 &&
+                point.x < tokens[point.y].length;
+    }
+
+    public boolean isAvailable(Point point) {
+        return List.of(AVAILABLE, VISITED).contains(getToken(point.y, point.x));
+    }
+
+    public long countVisitedLocations() {
+        return getVisitedLocations().size();
+    }
+
+    public Collection<Point> getVisitedLocations() {
+        return findAll(this::isVisited).toList();
+    }
+
+    public Optional<Point> find(Predicate<Character> predicate) {
+        return findAll(predicate).findFirst();
+    }
+
+    public Stream<Point> findAll(Predicate<Character> predicate) {
+        Collection<Point> points = new ArrayList<>();
+        for (int y = 0; y < tokens.length; y++) {
+            for (int x = 0; x < tokens[y].length; x++) {
+                if (predicate.test(getToken(y, x))) {
+                    points.add(new Point(y, x));
+                }
+            }
+        }
+        return points.stream();
+    }
+
+    public char getToken(Point point) {
+        return getToken(point.y, point.x);
     }
 
     public String getState() {
-        return IntStream.range(0, size).mapToObj(this::toRow).collect(Collectors.joining(System.lineSeparator()));
+        return IntStream.range(0, tokens.length)
+                .mapToObj(this::formatRow)
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    private Move calculateNextMove() {
-        Guard nextGuard = guard;
-        Location candidate = locations.get(nextGuard.getNextLocationKey());
-        while (Objects.nonNull(candidate)) {
-            if (candidate.isAvailable()) {
-                Location nextLocation = candidate.withToken(nextGuard.getDirection());
-                if (isStuckInLoop(nextLocation)) {
-                    return Move.builder().stuck(true).complete(true).build();
-                }
-                return Move.builder()
-                        .previous(guard.getLocation())
-                        .next(nextLocation)
-                        .direction(nextGuard.getDirection())
-                        .build();
-            }
-            nextGuard = nextGuard.rotate();
-            candidate = locations.get(nextGuard.getNextLocationKey());
-        }
-        return Move.builder().complete(true).build();
+    public void reset() {
+        IntStream.range(0, tokens.length).forEach(this::resetRow);
     }
 
-    private boolean isStuckInLoop(Location nextLocation) {
-        return previousLocations.contains(nextLocation);
+    private char getToken(int y, int x) {
+        return tokens[y][x];
     }
 
-    private LabMap perform(Move move) {
-        return LabMap.builder()
-                .size(size)
-                .guard(updateGuard(move))
-                .locations(updateLocations(move))
-                .previousLocations(updatePreviousLocations(move.getPrevious()))
-                .build();
+    private void resetRow(int y) {
+        IntStream.range(0, tokens[y].length)
+                .forEach(x -> tokens[y][x] = originalTokens[y][x]);
     }
 
-    private Map<String, Location> updateLocations(Move move) {
-        Location previous = move.getPrevious();
-        Location next = move.getNext();
-        return updateLocations(previous.toVisited(), next.withToken(move.getDirection()));
-    }
-
-    private Collection<Location> updatePreviousLocations(Location previous) {
-        Collection<Location> updatedPreviousLocations = new ArrayList<>(previousLocations);
-        updatedPreviousLocations.add(previous);
-        return updatedPreviousLocations;
-    }
-
-    private Guard updateGuard(Move move) {
-        return new Guard(move.getNext(), move.getDirection());
-    }
-
-    private LabMap performLastMove(Move move) {
-        return toBuilder()
-                .stuck(move.isStuck())
-                .locations(updateLocations(guard.getLocation().toVisited()))
-                .previousLocations(updatePreviousLocations(guard.getLocation()))
-                .build();
-    }
-
-    private Map<String, Location> updateLocations(Location... locationsToUpdate) {
-        Map<String, Location> updatedLocations = new HashMap<>(locations);
-        Arrays.stream(locationsToUpdate).forEach(location -> updatedLocations.put(location.getKey(), location));
-        return updatedLocations;
-    }
-
-    private String toRow(int y) {
-        return IntStream.range(0, size)
-                .mapToObj(x -> getToken(x, y))
+    private String formatRow(int y) {
+        return IntStream.range(0, tokens[y].length)
+                .mapToObj(x -> getToken(y, x))
                 .map(c -> Character.toString(c))
                 .collect(Collectors.joining());
     }
 
-    private char getToken(int x, int y) {
-        return locations.get(new Point(x, y).getKey()).getToken();
+    private boolean isVisited(char token) {
+        return token == VISITED;
     }
 
-    private Collection<Location> getVisitedLocations() {
-        return locations.values().stream().filter(Location::isVisited).toList();
+    private void setToken(int y, int x, char token) {
+        tokens[y][x] = token;
+    }
+
+    private static char[][] deepCopy(char[][] matrix) {
+        return Arrays.stream(matrix).map(char[]::clone).toArray(a -> matrix.clone());
+    }
+
+    @RequiredArgsConstructor
+    @EqualsAndHashCode
+    @ToString
+    public static class Point {
+        final int y;
+        final int x;
+
+        public Point north() {
+            return new Point(y - 1, x);
+        }
+
+        public Point east() {
+            return new Point(y, x + 1);
+        }
+
+        public Point south() {
+            return new Point(y + 1, x);
+        }
+
+        public Point west() {
+            return new Point(y, x - 1);
+        }
     }
 }
