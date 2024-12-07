@@ -34,6 +34,6 @@ public class PageRule {
     }
 
     public boolean isCorrectlyOrdered(Page page, int number) {
-        return before.containsAll(page.getPagesBefore(number)) && after.containsAll(page.getPagesAfter(number));
+        return before.containsAll(page.getPagesBefore(number));
     }
 }
