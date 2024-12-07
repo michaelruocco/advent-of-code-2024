@@ -33,7 +33,7 @@ class Day7Test {
         return Stream.of(
                 Arguments.of(EXAMPLE_PATH, PART_1_OPERATORS, 3749L),
                 Arguments.of(PATH, PART_1_OPERATORS, 5030892084481L),
-                Arguments.of(EXAMPLE_PATH, PART_2_OPERATORS, 11387L) /*,
-                Arguments.of(PATH, PART_2_OPERATORS, 91377448644679L)*/);
+                Arguments.of(EXAMPLE_PATH, PART_2_OPERATORS, 11387L),
+                Arguments.of(PATH, PART_2_OPERATORS, 91377448644679L));
     }
 }

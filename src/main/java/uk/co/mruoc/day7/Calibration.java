@@ -4,48 +4,41 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class Calibration {
 
     @Getter
     private final long testValue;
 
     private final List<Long> numbers;
-    private final Collection<OperatorSupplier> operatorSuppliers;
-
-    public Calibration(long testValue, List<Long> numbers, Collection<Character> operators) {
-        this.testValue = testValue;
-        this.numbers = numbers;
-        this.operatorSuppliers = toOperatorSuppliers(numbers.size(), operators);
-    }
+    private final Collection<Character> operators;
 
     public boolean couldBeTrue() {
-        return operatorSuppliers.stream().anyMatch(this::couldBeTrue);
+        return generateCombinations(numbers.size(), operators).stream()
+                .map(this::evaluate)
+                .anyMatch(result -> result == testValue);
     }
 
-    private boolean couldBeTrue(Supplier<Operator> supplier) {
-        long result = 0;
-        long n1 = numbers.get(0);
-        for (int i = 1; i < numbers.size(); i++) {
-            long n2 = numbers.get(i);
-            Operator operator = supplier.get();
-            result = operator.apply(n1, n2);
-            if (result > testValue) {
-                return false;
+    private long evaluate(String combination) {
+        long result = numbers.get(0);
+        for (int i = 0; i < combination.length() - 1; i++) {
+            char operator = combination.charAt(i);
+            long number = numbers.get(i + 1);
+            if (operator == '+') {
+                result += number;
+            } else if (operator == '*') {
+                result *= number;
+            } else if (operator == '|') {
+                result = Long.parseLong(String.valueOf(result) + number);
             }
-            n1 = result;
         }
-        return result == testValue;
+        return result;
     }
 
-    private Collection<OperatorSupplier> toOperatorSuppliers(int length, Collection<Character> operators) {
-        Collection<String> combinations = generateCombinations(length - 1, operators);
-        return combinations.stream().map(OperatorSupplier::new).toList();
-    }
-
-    private Collection<String> generateCombinations(int length, Collection<Character> operators) {
+    private static Collection<String> generateCombinations(int length, Collection<Character> operators) {
         if (length == 0) {
             return Collections.singletonList("");
         }
