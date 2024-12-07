@@ -56,9 +56,7 @@ public class LabMap {
     }
 
     public void addObstruction(Location location) {
-        if (isAvailable(location)) {
-            setToken(location.y, location.x, ADDED_OBSTRUCTION);
-        }
+        setToken(location.y, location.x, ADDED_OBSTRUCTION);
     }
 
     public boolean exists(Location location) {
