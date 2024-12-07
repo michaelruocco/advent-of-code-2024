@@ -58,6 +58,11 @@ dependencies {
 
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 
+/*test {
+    minHeapSize = "4096m"
+    maxHeapSize = "8192m"
+}*/
+
 tasks.withType(Test) {
     useJUnitPlatform()
     systemProperty "org.slf4j.simpleLogger.defaultLogLevel", "debug"
