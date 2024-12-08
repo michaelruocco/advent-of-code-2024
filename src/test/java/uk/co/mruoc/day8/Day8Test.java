@@ -22,7 +22,7 @@ class Day8Test {
     private static final String PATH = "day-8/antennas.txt";
     private static final String EXPECTED_STATE = loadContentFromClasspath("day-8/antennas-expected-state.txt");
 
-    private static final AntiNodeFinder PART_1_FINDER = new AntiNodeFinder();
+    private static final AntiNodeFinder PART_1_FINDER = new Part1AntiNodeFinder();
 
     @ParameterizedTest
     @MethodSource("pathAndFinderAndExpectedAntiNodeCount")
