@@ -12,12 +12,13 @@ import lombok.RequiredArgsConstructor;
 public class Frequency {
 
     private final AntiNodeFinder antiNodeFinder;
+    private final int gridSize;
 
     @Getter
     private final Collection<Location> locations;
 
-    public Frequency(int gridSize) {
-        this(new AntiNodeFinder(gridSize), new ArrayList<>());
+    public Frequency(AntiNodeFinder antiNodeFinder, int gridSize) {
+        this(antiNodeFinder, gridSize, new ArrayList<>());
     }
 
     public void add(Location location) {
@@ -26,7 +27,7 @@ public class Frequency {
 
     public Collection<Location> toAntiNodes() {
         return getUniquePairs().stream()
-                .map(antiNodeFinder::toAntiNodes)
+                .map(pair -> antiNodeFinder.toAntiNodes(pair, gridSize))
                 .flatMap(Collection::stream)
                 .toList();
     }

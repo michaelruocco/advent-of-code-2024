@@ -15,6 +15,7 @@ public class AntennaMap {
     private static final char ANTI_NODE = '#';
 
     private final char[][] tokens;
+    private final AntiNodeFinder antiNodeFinder;
 
     public long countAntiNodes() {
         return getAntiNodes().count();
@@ -51,7 +52,7 @@ public class AntennaMap {
             for (int x = 0; x < size; x++) {
                 char token = tokens[y][x];
                 if (token != AVAILABLE) {
-                    Frequency frequency = frequencies.getOrDefault(token, new Frequency(size));
+                    Frequency frequency = frequencies.getOrDefault(token, new Frequency(antiNodeFinder, size));
                     frequency.add(new Location(y, x));
                     frequencies.put(token, frequency);
                 }
