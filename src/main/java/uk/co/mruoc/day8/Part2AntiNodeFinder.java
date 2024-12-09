@@ -55,7 +55,7 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
 
         int x = x1;
         int y = y1;
-        
+
         Collection<Location> antiNodes = new HashSet<>();
         antiNodes.add(new Location(y, x));
 
