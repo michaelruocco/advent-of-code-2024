@@ -46,21 +46,19 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
         int x2 = l2.x;
         int y2 = l2.y;
 
-        // Calculate the differences between the two points
         int dx = x2 - x1;
         int dy = y2 - y1;
 
-        // Calculate the greatest common divisor (GCD) of dx and dy to step through the grid
         int gcd = gcd(Math.abs(dx), Math.abs(dy));
-        dx /= gcd; // Normalize the step size for x
-        dy /= gcd; // Normalize the step size for y
+        dx /= gcd;
+        dy /= gcd;
 
         int x = x1;
         int y = y1;
+        
         Collection<Location> antiNodes = new HashSet<>();
         antiNodes.add(new Location(y, x));
 
-        // Step in the direction of (x2, y2)
         while (boundsChecker.isInGridBounds(gridSize, y, x)) {
             x += dx;
             y += dy;
@@ -69,8 +67,6 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
             }
         }
 
-        // We also need to extend the line beyond the given points, starting from (x2, y2)
-        // Iterate backwards (for the case of reversed input)
         x = x1;
         y = y1;
         while (boundsChecker.isInGridBounds(gridSize, y, x)) {
