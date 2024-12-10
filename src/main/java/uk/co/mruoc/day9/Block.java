@@ -19,10 +19,6 @@ public class Block {
         return getId().map(i -> Integer.toString(i)).orElse(".");
     }
 
-    public int forceGetId() {
-        return getId().orElseThrow();
-    }
-
     private Optional<Integer> getId() {
         return Optional.ofNullable(id);
     }
