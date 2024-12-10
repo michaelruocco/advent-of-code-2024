@@ -9,23 +9,32 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class Day10Test {
 
-    private static final String EXAMPLE_PATH_1 = "day-10/example-map-1.txt";
-    private static final String EXAMPLE_PATH_2 = "day-10/example-map-2.txt";
+    private static final String PATH = "day-10/map.txt";
 
     private final TrailMapLoader loader = new TrailMapLoader();
-    private final TrailFinder finder = new TrailFinder();
 
     @ParameterizedTest
     @MethodSource("pathAndExpectedScore")
     void shouldCalculateMapScore(String path, long expectedScore) {
-        TrailMap trailMap = loader.load(path);
+        TrailMap map = loader.load(path);
+        TrailFinder finder = new TrailFinder(map);
 
-        long score = finder.findScore(trailMap);
+        long score = finder.findScore();
 
         assertThat(score).isEqualTo(expectedScore);
     }
 
     private static Stream<Arguments> pathAndExpectedScore() {
-        return Stream.of(Arguments.of(EXAMPLE_PATH_1, 1), Arguments.of(EXAMPLE_PATH_2, 36L));
+        return Stream.of(
+                Arguments.of(examplePath(1), 1),
+                Arguments.of(examplePath(2), 36L),
+                Arguments.of(examplePath(3), 2L),
+                Arguments.of(examplePath(4), 4L),
+                Arguments.of(examplePath(5), 2L));//,
+                //Arguments.of(PATH, -1L));
+    }
+
+    private static String examplePath(int number) {
+        return String.format("day-10/example-map-%d.txt", number);
     }
 }
