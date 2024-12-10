@@ -2,6 +2,9 @@ package uk.co.mruoc.day10;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -13,30 +16,44 @@ public class TrailFinder {
     private Point location;
     private int height;
     private List<Move> route;
+    private Deque<Move> alternatives;
+    private Collection<Point> summits;
+    private Collection<String> decisions;
 
     public long findScore() {
         return map.getTrailheads().stream().mapToLong(this::findScore).sum();
     }
 
     private long findScore(Point trailhead) {
-        int score = 0;
-        resetTrail(trailhead);
+        resetTrail();
+        findTrailFrom(trailhead);
+        while (!alternatives.isEmpty()) {
+            findTrailFrom(alternatives.pop().from);
+        }
+        return summits.size();
+    }
+
+    private void findTrailFrom(Point location) {
+        setLocation(location);
         Collection<Move> moves = findCandidateMoves();
         while (!moves.isEmpty()) {
             performMove(moves);
             moves = findCandidateMoves();
         }
-        printMoves();
-        if (isAtSummit()) {
-            score++;
-        }
-        return score;
+        //printMoves();
+        recordIfAtSummit();
     }
 
-    private void resetTrail(Point trailhead) {
-        location = trailhead;
-        height = map.getHeight(trailhead);
+    private void resetTrail() {
         route = new ArrayList<>();
+        alternatives = new LinkedList<>();
+        summits = new HashSet<>();
+        decisions = new HashSet<>();
+    }
+
+    private void setLocation(Point point) {
+        location = point;
+        height = map.getHeight(location);
     }
 
     private Collection<Move> findCandidateMoves() {
@@ -51,7 +68,7 @@ public class TrailFinder {
     }
 
     private boolean canMakeMove(Move move) {
-        return map.isInBounds(move.to) && isOneLevelHigher(move.to);
+        return map.isInBounds(move.to) && isOneLevelHigher(move.to) && !decisions.contains(move.key());
     }
 
     private boolean isOneLevelHigher(Point candidate) {
@@ -71,11 +88,16 @@ public class TrailFinder {
         if (candidates.size() == 1) {
             return candidate;
         }
+        decisions.add(candidate.key());
+        candidates.remove(candidate);
+        alternatives.addAll(candidates);
         return candidate;
     }
 
-    private boolean isAtSummit() {
-        return map.isSummit(location);
+    private void recordIfAtSummit() {
+        if (map.isSummit(location)) {
+            summits.add(location);
+        }
     }
 
     private void printMoves() {

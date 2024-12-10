@@ -1,8 +1,10 @@
 package uk.co.mruoc.day10;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
+@ToString
 public class Move {
     final Point from;
     final Point to;

@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class Day10Test {
+class Day10Test {
 
     private static final String PATH = "day-10/map.txt";
 
@@ -29,9 +29,9 @@ public class Day10Test {
                 Arguments.of(examplePath(1), 1),
                 Arguments.of(examplePath(2), 2L),
                 Arguments.of(examplePath(3), 4L),
-                Arguments.of(examplePath(4), 2L),
-                Arguments.of(examplePath(5), 36L)); // ,
-        // Arguments.of(PATH, -1L));
+                Arguments.of(examplePath(4), 3L),
+                Arguments.of(examplePath(5), 36L),
+                Arguments.of(PATH, -1L));
     }
 
     private static String examplePath(int number) {
