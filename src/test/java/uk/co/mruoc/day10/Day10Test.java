@@ -27,11 +27,11 @@ public class Day10Test {
     private static Stream<Arguments> pathAndExpectedScore() {
         return Stream.of(
                 Arguments.of(examplePath(1), 1),
-                Arguments.of(examplePath(2), 36L),
-                Arguments.of(examplePath(3), 2L),
-                Arguments.of(examplePath(4), 4L),
-                Arguments.of(examplePath(5), 2L));//,
-                //Arguments.of(PATH, -1L));
+                Arguments.of(examplePath(2), 2L),
+                Arguments.of(examplePath(3), 4L),
+                Arguments.of(examplePath(4), 2L),
+                Arguments.of(examplePath(5), 36L)); // ,
+        // Arguments.of(PATH, -1L));
     }
 
     private static String examplePath(int number) {

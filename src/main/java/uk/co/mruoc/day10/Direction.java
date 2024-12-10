@@ -14,13 +14,4 @@ public enum Direction {
             default -> new Point(point.y, point.x - 1);
         };
     }
-
-    public Direction rotate() {
-        return switch (this) {
-            case NORTH -> EAST;
-            case EAST -> SOUTH;
-            case SOUTH -> WEST;
-            default -> NORTH;
-        };
-    }
 }
