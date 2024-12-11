@@ -15,27 +15,28 @@ class Day10Test {
 
     @ParameterizedTest
     @MethodSource("pathAndFinderAndExpectedResult")
-    void shouldCalculateMapResult(String path, PointFinder pointFinder, long expectedResult) {
+    void shouldCalculateMapResult(String path, PointAccumulator accumulator, long expectedResult) {
         TrailMap map = loader.load(path);
 
-        long result = new TrailFinder(pointFinder).findResult(map);
+        long result = new TrailFinder(accumulator).findResult(map);
 
         assertThat(result).isEqualTo(expectedResult);
     }
 
     private static Stream<Arguments> pathAndFinderAndExpectedResult() {
-        PointFinder scoreFinder = new ScorePointFinder();
-        PointFinder ratingFinder = new RatingPointFinder();
+        PointAccumulator scoreAccumulator = new ScorePointAccumulator();
+        PointAccumulator ratingAccumulator = new RatingPointAccumulator();
         return Stream.of(
-                Arguments.of(examplePath(1), scoreFinder, 1),
-                Arguments.of(examplePath(2), scoreFinder, 2L),
-                Arguments.of(examplePath(3), scoreFinder, 4L),
-                Arguments.of(examplePath(4), scoreFinder, 3L),
-                Arguments.of(examplePath(5), scoreFinder, 36L),
-                Arguments.of(examplePath(6), ratingFinder, 1L),
-                Arguments.of(examplePath(7), ratingFinder, 4L),
-                Arguments.of(examplePath(8), ratingFinder, 2L),
-                Arguments.of(PATH, scoreFinder, 566L));
+                Arguments.of(examplePath(1), scoreAccumulator, 1),
+                Arguments.of(examplePath(2), scoreAccumulator, 2L),
+                Arguments.of(examplePath(3), scoreAccumulator, 4L),
+                Arguments.of(examplePath(4), scoreAccumulator, 3L),
+                Arguments.of(examplePath(5), scoreAccumulator, 36L),
+                Arguments.of(PATH, scoreAccumulator, 566L),
+                Arguments.of(examplePath(6), ratingAccumulator, 3L),
+                Arguments.of(examplePath(7), ratingAccumulator, 13L),
+                Arguments.of(examplePath(8), ratingAccumulator, 227L),
+                Arguments.of(PATH, ratingAccumulator, 1324L));
     }
 
     private static String examplePath(int number) {

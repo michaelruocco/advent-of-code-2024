@@ -36,8 +36,4 @@ public class TrailMapLoader {
     private static boolean isTrailhead(int height) {
         return height == 0;
     }
-
-    private static int[] toRow(String line) {
-        return line.chars().map(c -> c - '0').toArray();
-    }
 }
