@@ -14,4 +14,8 @@ public class Point {
     public String key() {
         return String.format("%s-%s", y, x);
     }
+
+    public boolean matches(Point otherPoint) {
+        return x == otherPoint.x && y == otherPoint.y;
+    }
 }

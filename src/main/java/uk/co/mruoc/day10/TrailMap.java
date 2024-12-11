@@ -16,10 +16,6 @@ public class TrailMap {
         return heights.length;
     }
 
-    public boolean isSummit(Point point) {
-        return getHeight(point) == 9;
-    }
-
     public int getHeight(Point point) {
         return heights[point.y][point.x];
     }

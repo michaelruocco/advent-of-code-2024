@@ -14,24 +14,28 @@ class Day10Test {
     private final TrailMapLoader loader = new TrailMapLoader();
 
     @ParameterizedTest
-    @MethodSource("pathAndExpectedScore")
-    void shouldCalculateMapScore(String path, long expectedScore) {
+    @MethodSource("pathAndFinderAndExpectedResult")
+    void shouldCalculateMapResult(String path, PointFinder pointFinder, long expectedResult) {
         TrailMap map = loader.load(path);
-        TrailFinder finder = new TrailFinder(map);
 
-        long score = finder.findScore();
+        long result = new TrailFinder(pointFinder).findResult(map);
 
-        assertThat(score).isEqualTo(expectedScore);
+        assertThat(result).isEqualTo(expectedResult);
     }
 
-    private static Stream<Arguments> pathAndExpectedScore() {
+    private static Stream<Arguments> pathAndFinderAndExpectedResult() {
+        PointFinder scoreFinder = new ScorePointFinder();
+        PointFinder ratingFinder = new RatingPointFinder();
         return Stream.of(
-                Arguments.of(examplePath(1), 1),
-                Arguments.of(examplePath(2), 2L),
-                Arguments.of(examplePath(3), 4L),
-                Arguments.of(examplePath(4), 3L),
-                Arguments.of(examplePath(5), 36L),
-                Arguments.of(PATH, -1L));
+                Arguments.of(examplePath(1), scoreFinder, 1),
+                Arguments.of(examplePath(2), scoreFinder, 2L),
+                Arguments.of(examplePath(3), scoreFinder, 4L),
+                Arguments.of(examplePath(4), scoreFinder, 3L),
+                Arguments.of(examplePath(5), scoreFinder, 36L),
+                Arguments.of(examplePath(6), ratingFinder, 1L),
+                Arguments.of(examplePath(7), ratingFinder, 4L),
+                Arguments.of(examplePath(8), ratingFinder, 2L),
+                Arguments.of(PATH, scoreFinder, 566L));
     }
 
     private static String examplePath(int number) {
