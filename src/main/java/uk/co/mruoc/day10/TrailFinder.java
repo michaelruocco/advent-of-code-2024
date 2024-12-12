@@ -21,7 +21,7 @@ public class TrailFinder {
         long sum = 0;
         for (Point trailhead : map.getTrailheads()) {
             Collection<Point> allSummits = new ArrayList<>();
-            find(map, new ArrayList<>(List.of(trailhead)), allSummits, 1);
+            find(map, List.of(trailhead), allSummits, 1);
             sum += allSummits.size();
         }
         return sum;
