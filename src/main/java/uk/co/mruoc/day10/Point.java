@@ -11,10 +11,6 @@ public class Point {
     final int y;
     final int x;
 
-    public String key() {
-        return String.format("%s-%s", y, x);
-    }
-
     public boolean matches(Point otherPoint) {
         return x == otherPoint.x && y == otherPoint.y;
     }

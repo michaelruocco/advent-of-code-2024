@@ -12,10 +12,6 @@ public class TrailMap {
     @Getter
     private final Collection<Point> trailheads;
 
-    public int size() {
-        return heights.length;
-    }
-
     public int getHeight(Point point) {
         return heights[point.y][point.x];
     }

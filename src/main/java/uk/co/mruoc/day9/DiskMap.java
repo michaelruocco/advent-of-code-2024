@@ -41,14 +41,9 @@ public class DiskMap {
     }
 
     public long checksum() {
-        long checksum = 0;
-        for (int i = 0; i < blocks.size(); i++) {
-            Block block = blocks.get(i);
-            if (!block.isFree()) {
-                checksum += block.toChecksum(i);
-            }
-        }
-        return checksum;
+        return IntStream.range(0, blocks.size())
+                .mapToLong(i -> blocks.get(i).toChecksum(i))
+                .sum();
     }
 
     private static int[] toInts(String input) {
