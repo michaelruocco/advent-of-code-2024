@@ -1,5 +1,6 @@
 package uk.co.mruoc.day12;
 
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -9,15 +10,38 @@ public class Plot {
     final int y;
     final int x;
 
-    public boolean adjacentTo(Plot otherPlot) {
-        return horizontallyAdjacent(otherPlot) || verticallyAdjacent(otherPlot);
+    public int calculatePerimeter(Collection<Plot> otherPlots) {
+        int perimeter = 4;
+        for (Plot otherPlot : otherPlots) {
+            if (isNorthOf(otherPlot)) {
+                perimeter--;
+            }
+            if (isEastOf(otherPlot)) {
+                perimeter--;
+            }
+            if (isSouthOf(otherPlot)) {
+                perimeter--;
+            }
+            if (isWestOf(otherPlot)) {
+                perimeter--;
+            }
+        }
+        return perimeter;
     }
 
-    private boolean horizontallyAdjacent(Plot otherPlot) {
-        return y == otherPlot.y && (x == otherPlot.x - 1 || x == otherPlot.x + 1);
+    private boolean isNorthOf(Plot otherPlot) {
+        return x == otherPlot.x && y + 1 == otherPlot.y;
     }
 
-    private boolean verticallyAdjacent(Plot otherPlot) {
-        return x == otherPlot.x && (y == otherPlot.y - 1 || y == otherPlot.y + 1);
+    private boolean isEastOf(Plot otherPlot) {
+        return x + 1 == otherPlot.x && y == otherPlot.y;
+    }
+
+    private boolean isSouthOf(Plot otherPlot) {
+        return x == otherPlot.x && y - 1 == otherPlot.y;
+    }
+
+    private boolean isWestOf(Plot otherPlot) {
+        return x - 1 == otherPlot.x && y == otherPlot.y;
     }
 }
