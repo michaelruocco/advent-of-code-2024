@@ -15,12 +15,20 @@ public class Garden {
         return regions.stream().mapToInt(Region::getFencePrice).sum();
     }
 
+    public int getDiscountedPrice() {
+        return regions.stream().mapToInt(Region::getDiscountedFencePrice).sum();
+    }
+
     public Collection<Integer> getRegionAreas(char plant) {
         return getRegions(plant).map(Region::getArea).toList();
     }
 
     public Collection<Integer> getRegionPerimeters(char plant) {
         return getRegions(plant).map(Region::getPerimeter).toList();
+    }
+
+    public Collection<Integer> getRegionSides(char plant) {
+        return getRegions(plant).map(Region::getSides).toList();
     }
 
     private Stream<Region> getRegions(char plant) {

@@ -5,6 +5,9 @@ import java.util.Collection;
 import uk.co.mruoc.GridLoader;
 
 public class GardenLoader {
+
+    private static final int[] DIRECTIONS = {-1, 0, 1, 0, 0, -1, 0, 1};
+
     public Garden load(String path) {
         char[][] grid = GridLoader.load(path);
         return new Garden(toRegions(grid));
@@ -29,10 +32,9 @@ public class GardenLoader {
     private static void dfs(int y, int x, char[][] grid, boolean[][] visited, char c, Region region) {
         visited[y][x] = true;
         region.add(new Plot(y, x));
-        int[] directions = {-1, 0, 1, 0, 0, -1, 0, 1}; // up, down, left, right
         for (int i = 0; i < 8; i += 2) {
-            int ny = y + directions[i];
-            int nx = x + directions[i + 1];
+            int ny = y + DIRECTIONS[i];
+            int nx = x + DIRECTIONS[i + 1];
             if (ny >= 0
                     && ny < grid.length
                     && nx >= 0
@@ -42,5 +44,20 @@ public class GardenLoader {
                 dfs(ny, nx, grid, visited, c, region);
             }
         }
+    }
+
+    private static int countSides(Region region, char[][] grid) {
+        int sides = 0;
+        for (Plot plot : region.getPlots()) {
+            for (int i = 0; i < 8; i += 2) {
+                int ny = plot.y + DIRECTIONS[i];
+                int nx = plot.x + DIRECTIONS[i + 1];
+                // Check if the neighbor is out of bounds or a different character
+                if (ny < 0 || ny >= grid.length || nx < 0 || nx >= grid[0].length || grid[ny][nx] != grid[plot.y][plot.x]) {
+                    sides++; // Exposed side
+                }
+            }
+        }
+        return sides;
     }
 }

@@ -16,6 +16,8 @@ class Day12Test {
     private static final Garden GARDEN_1 = LOADER.load(examplePath(1));
     private static final Garden GARDEN_2 = LOADER.load(examplePath(2));
     private static final Garden GARDEN_3 = LOADER.load(examplePath(3));
+    private static final Garden GARDEN_4 = LOADER.load(examplePath(4));
+    private static final Garden GARDEN_5 = LOADER.load(examplePath(5));
 
     @ParameterizedTest
     @MethodSource("gardenAndExpectedRegions")
@@ -49,6 +51,22 @@ class Day12Test {
         assertThat(price).isEqualTo(expectedPrice);
     }
 
+    @ParameterizedTest
+    @MethodSource("gardenAndPlantAndExpectedSides")
+    void shouldGetRegionSides(Garden garden, char region, Collection<Integer> expectedSides) {
+        Collection<Integer> sides = garden.getRegionSides(region);
+
+        assertThat(sides).containsExactlyInAnyOrderElementsOf(expectedSides);
+    }
+
+    @ParameterizedTest
+    @MethodSource("gardenAndExpectedDiscountedFencePrice")
+    void shouldGetDiscountedGardenFencePrice(Garden garden, int expectedPrice) {
+        int price = garden.getDiscountedPrice();
+
+        assertThat(price).isEqualTo(expectedPrice);
+    }
+
     private static Stream<Arguments> gardenAndExpectedRegions() {
         return Stream.of(
                 Arguments.of(GARDEN_1, List.of('A', 'B', 'C', 'D', 'E')),
@@ -73,7 +91,11 @@ class Day12Test {
                 Arguments.of(GARDEN_3, 'J', List.of(11)),
                 Arguments.of(GARDEN_3, 'E', List.of(13)),
                 Arguments.of(GARDEN_3, 'M', List.of(5)),
-                Arguments.of(GARDEN_3, 'S', List.of(3)));
+                Arguments.of(GARDEN_3, 'S', List.of(3)),
+                Arguments.of(GARDEN_4, 'E', List.of(17)),
+                Arguments.of(GARDEN_4, 'X', List.of(4, 4)),
+                Arguments.of(GARDEN_5, 'A', List.of(28)),
+                Arguments.of(GARDEN_5, 'B', List.of(4, 4)));
     }
 
     private static Stream<Arguments> gardenAndPlantAndExpectedPerimeters() {
@@ -93,7 +115,35 @@ class Day12Test {
                 Arguments.of(GARDEN_3, 'J', List.of(20)),
                 Arguments.of(GARDEN_3, 'E', List.of(18)),
                 Arguments.of(GARDEN_3, 'M', List.of(12)),
-                Arguments.of(GARDEN_3, 'S', List.of(8)));
+                Arguments.of(GARDEN_3, 'S', List.of(8)),
+                Arguments.of(GARDEN_4, 'E', List.of(36)),
+                Arguments.of(GARDEN_4, 'X', List.of(10, 10)),
+                Arguments.of(GARDEN_5, 'A', List.of(40)),
+                Arguments.of(GARDEN_5, 'B', List.of(8, 8)));
+    }
+
+    private static Stream<Arguments> gardenAndPlantAndExpectedSides() {
+        return Stream.of(
+                Arguments.of(GARDEN_1, 'A', List.of(4)),
+                Arguments.of(GARDEN_1, 'B', List.of(4)),
+                Arguments.of(GARDEN_1, 'C', List.of(8)),
+                Arguments.of(GARDEN_1, 'D', List.of(4)),
+                Arguments.of(GARDEN_1, 'E', List.of(4)),
+                Arguments.of(GARDEN_2, 'O', List.of(20)),
+                Arguments.of(GARDEN_2, 'X', List.of(4, 4, 4, 4)),
+                Arguments.of(GARDEN_3, 'R', List.of(10)),
+                Arguments.of(GARDEN_3, 'I', List.of(4, 16)),
+                Arguments.of(GARDEN_3, 'C', List.of(22, 4)),
+                Arguments.of(GARDEN_3, 'F', List.of(12)),
+                Arguments.of(GARDEN_3, 'V', List.of(10)),
+                Arguments.of(GARDEN_3, 'J', List.of(12)),
+                Arguments.of(GARDEN_3, 'E', List.of(8)),
+                Arguments.of(GARDEN_3, 'M', List.of(6)),
+                Arguments.of(GARDEN_3, 'S', List.of(6)),
+                Arguments.of(GARDEN_4, 'E', List.of(12)),
+                Arguments.of(GARDEN_4, 'X', List.of(4, 4)),
+                Arguments.of(GARDEN_5, 'A', List.of(12)), //fix
+                Arguments.of(GARDEN_5, 'B', List.of(4, 4)));
     }
 
     private static Stream<Arguments> gardenAndExpectedFencePrice() {
@@ -102,6 +152,16 @@ class Day12Test {
                 Arguments.of(GARDEN_2, 772),
                 Arguments.of(GARDEN_3, 1930),
                 Arguments.of(LOADER.load("day-12/puzzle.txt"), 1461806));
+    }
+
+    private static Stream<Arguments> gardenAndExpectedDiscountedFencePrice() {
+        return Stream.of(
+                Arguments.of(GARDEN_1, 80),
+                Arguments.of(GARDEN_2, 436),
+                Arguments.of(GARDEN_3, 1206),
+                Arguments.of(GARDEN_4, 236),
+                Arguments.of(GARDEN_5, 368),
+                Arguments.of(LOADER.load("day-12/puzzle.txt"), 887932));
     }
 
     private static String examplePath(int number) {

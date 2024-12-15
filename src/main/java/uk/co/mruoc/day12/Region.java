@@ -7,13 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @RequiredArgsConstructor
+@Getter
 @ToString
 public class Region {
 
-    @Getter
     private final char plant;
-
-    @Getter
     private final Collection<Plot> plots;
 
     public Region(char plant) {
@@ -28,8 +26,16 @@ public class Region {
         return plots.stream().mapToInt(plot -> plot.calculatePerimeter(plots)).sum();
     }
 
+    public int getSides() {
+        return plots.stream().mapToInt(plot -> plot.calculateCorners(plots)).sum();
+    }
+
     public int getFencePrice() {
         return getArea() * getPerimeter();
+    }
+
+    public int getDiscountedFencePrice() {
+        return getArea() * getSides();
     }
 
     public void add(Plot plot) {
