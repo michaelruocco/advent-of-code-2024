@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import uk.co.mruoc.file.FileLoader;
 
-public class Day9Test {
+class Day9Test {
 
     @ParameterizedTest
     @CsvSource({
