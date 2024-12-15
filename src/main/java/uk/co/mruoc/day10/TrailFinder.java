@@ -31,7 +31,7 @@ public class TrailFinder {
         Collection<Point> summits = new ArrayList<>();
         for (Point point : points) {
             Collection<Point> candidates = candidatePointFinder.find(map, point, height);
-            if (height == SUMMIT && !candidates.isEmpty()) {
+            if (height == SUMMIT) {
                 summits.addAll(candidates);
             } else {
                 Collection<Point> nextPoints = find(map, candidates, allSummits, height + 1);
