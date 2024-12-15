@@ -2,7 +2,6 @@ package uk.co.mruoc.day12;
 
 import java.util.Collection;
 import java.util.List;
-
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -39,37 +38,33 @@ public class Plot {
 
     private int calculateOuterCorners(Collection<Plot> otherPlots) {
         int outerCorners = 0;
-        if (otherPlots.stream().noneMatch(p -> List.of(northOf(), northOf().eastOf(), eastOf()).contains(p))) {
+        if (containsNone(otherPlots, northOf(), northEastOf(), eastOf())) {
             outerCorners++;
         }
-        if (otherPlots.stream().noneMatch(p -> List.of(eastOf(), southOf().eastOf(), southOf()).contains(p))) {
+        if (containsNone(otherPlots, eastOf(), southEastOf(), southOf())) {
             outerCorners++;
         }
-        if (otherPlots.stream().noneMatch(p -> List.of(southOf(), southOf().westOf(), westOf()).contains(p))) {
+        if (containsNone(otherPlots, southOf(), southWestOf(), westOf())) {
             outerCorners++;
         }
-        if (otherPlots.stream().noneMatch(p -> List.of(westOf(), northOf().westOf(), northOf()).contains(p))) {
+        if (containsNone(otherPlots, westOf(), northWestOf(), northOf())) {
             outerCorners++;
         }
         return outerCorners;
     }
 
-    private boolean containsNone(Collection<Plot> otherPlots, Plot... plotsToFind) {
-        return otherPlots.stream().noneMatch(p -> List.of(plotsToFind).contains(p));
-    }
-
     private int calculateInnerCorners(Collection<Plot> otherPlots) {
         int innerCorners = 0;
-        if (!otherPlots.contains(eastOf()) && otherPlots.contains(northOf().eastOf())) {
+        if (!otherPlots.contains(eastOf()) && otherPlots.contains(northEastOf())) {
             innerCorners++;
         }
-        if (!otherPlots.contains(eastOf()) && otherPlots.contains(southOf().eastOf())) {
+        if (!otherPlots.contains(eastOf()) && otherPlots.contains(southEastOf())) {
             innerCorners++;
         }
-        if (!otherPlots.contains(westOf()) && otherPlots.contains(northOf().westOf())) {
+        if (!otherPlots.contains(westOf()) && otherPlots.contains(northWestOf())) {
             innerCorners++;
         }
-        if (!otherPlots.contains(westOf()) && otherPlots.contains(southOf().westOf())) {
+        if (!otherPlots.contains(westOf()) && otherPlots.contains(southWestOf())) {
             innerCorners++;
         }
         return innerCorners;
@@ -95,9 +90,24 @@ public class Plot {
         return new Plot(y - 1, x);
     }
 
+    private Plot northEastOf() {
+        return new Plot(y - 1, x + 1);
+    }
+
+    private Plot northWestOf() {
+        return new Plot(y - 1, x - 1);
+    }
 
     private Plot eastOf() {
         return new Plot(y, x + 1);
+    }
+
+    private Plot southEastOf() {
+        return new Plot(y + 1, x + 1);
+    }
+
+    private Plot southWestOf() {
+        return new Plot(y + 1, x - 1);
     }
 
     private Plot southOf() {
@@ -106,5 +116,9 @@ public class Plot {
 
     private Plot westOf() {
         return new Plot(y, x - 1);
+    }
+
+    private static boolean containsNone(Collection<Plot> otherPlots, Plot... plotsToFind) {
+        return otherPlots.stream().noneMatch(p -> List.of(plotsToFind).contains(p));
     }
 }

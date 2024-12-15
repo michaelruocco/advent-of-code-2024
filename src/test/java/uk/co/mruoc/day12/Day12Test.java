@@ -142,7 +142,7 @@ class Day12Test {
                 Arguments.of(GARDEN_3, 'S', List.of(6)),
                 Arguments.of(GARDEN_4, 'E', List.of(12)),
                 Arguments.of(GARDEN_4, 'X', List.of(4, 4)),
-                Arguments.of(GARDEN_5, 'A', List.of(12)), //fix
+                Arguments.of(GARDEN_5, 'A', List.of(12)), // fix
                 Arguments.of(GARDEN_5, 'B', List.of(4, 4)));
     }
 
