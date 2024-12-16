@@ -8,6 +8,7 @@ public class WarehouseMap {
     private static final char WALL = '#';
     private static final char FREE = '.';
     private static final char BOX = 'O';
+    private static final char EXPANDED_BOX = '[';
 
     private final char[][] grid;
     private Point robotLocation;
@@ -50,12 +51,29 @@ public class WarehouseMap {
         int sum = 0;
         for (int y = 0; y < grid.length; y++) {
             for (int x = 0; x < grid[0].length; x++) {
-                if (grid[y][x] == BOX) {
+                char c = grid[y][x];
+                if (c == BOX || c == EXPANDED_BOX) {
                     sum += toGPS(y, x);
                 }
             }
         }
         return sum;
+    }
+
+    public WarehouseMap expand() {
+        char[][] copy = new char[grid.length][grid[0].length * 2];
+        for (int y = 0; y < grid.length; y++) {
+            int copyX = 0;
+            for (int x = 0; x < grid[0].length; x++) {
+                char token = grid[y][x];
+                char[] expandedToken = expand(token);
+                copy[y][copyX] = expandedToken[0];
+                copyX++;
+                copy[y][copyX] = expandedToken[1];
+                copyX++;
+            }
+        }
+        return new WarehouseMap(copy);
     }
 
     private void moveNorth() {
@@ -175,5 +193,17 @@ public class WarehouseMap {
 
     private static int toGPS(int y, int x) {
         return (y * 100) + x;
+    }
+
+    private static char[] expand(char token) {
+        if (token == '#') {
+            return new char[] {'#', '#'};
+        } else if (token == 'O') {
+            return new char[] {'[', ']'};
+        } else if (token == '.') {
+            return new char[] {'.', '.'};
+        } else {
+            return new char[] {'@', '.'};
+        }
     }
 }
