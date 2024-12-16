@@ -16,7 +16,7 @@ public class GridLoader {
         return toTokens(new ArrayList<>(lines));
     }
 
-    private static char[][] toTokens(List<String> lines) {
+    public static char[][] toTokens(List<String> lines) {
         int size = lines.size();
         char[][] tokens = new char[size][size];
         IntStream.range(0, size).forEach(y -> tokens[y] = toRow(lines.get(y)));
