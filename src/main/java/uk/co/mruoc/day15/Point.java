@@ -1,13 +1,23 @@
 package uk.co.mruoc.day15;
 
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
 @ToString
 public class Point {
     final int y;
     final int x;
+
+    public String key() {
+        return String.format("%s-%s", y, x);
+    }
+
+    public Point add(Point other) {
+        return new Point(y + other.y, x + other.x);
+    }
 
     public Point north() {
         return new Point(y - 1, x);

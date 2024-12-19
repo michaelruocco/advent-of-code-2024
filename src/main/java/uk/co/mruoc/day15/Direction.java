@@ -11,6 +11,15 @@ public enum Direction {
 
     final char token;
 
+    public Point move(Point point) {
+        return switch (this) {
+            case NORTH -> point.north();
+            case EAST -> point.east();
+            case SOUTH -> point.south();
+            default -> point.west();
+        };
+    }
+
     public static Direction build(char c) {
         return switch (c) {
             case '^' -> NORTH;
