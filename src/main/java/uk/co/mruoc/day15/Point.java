@@ -11,10 +11,6 @@ public class Point {
     final int y;
     final int x;
 
-    public String key() {
-        return String.format("%s-%s", y, x);
-    }
-
     public Point add(Point other) {
         return new Point(y + other.y, x + other.x);
     }

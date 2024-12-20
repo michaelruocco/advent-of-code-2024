@@ -5,16 +5,16 @@ import static uk.co.mruoc.day15.Tokens.ROBOT;
 import static uk.co.mruoc.day15.Tokens.WALL;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
 public class WarehouseMap {
 
-    private final Map<String, Point> walls;
-    private final Map<String, Point> boxes;
+    private final Set<Point> walls;
+    private final Set<Point> boxes;
 
     private final int height;
     private final WarehouseMapScalePolicy scalePolicy;
@@ -24,8 +24,8 @@ public class WarehouseMap {
     private Point robotLocation;
 
     public WarehouseMap(List<String> lines, WarehouseMapScalePolicy scalePolicy) {
-        this.walls = new HashMap<>();
-        this.boxes = new HashMap<>();
+        this.walls = new HashSet<>();
+        this.boxes = new HashSet<>();
         this.height = lines.size();
         this.scalePolicy = scalePolicy;
         for (int y = 0; y < height; y++) {
@@ -34,8 +34,8 @@ public class WarehouseMap {
                 char token = line.charAt(x);
                 Point point = new Point(y, x * scalePolicy.getXScale());
                 switch (token) {
-                    case WALL -> walls.put(point.key(), point);
-                    case BOX -> boxes.put(point.key(), point);
+                    case WALL -> walls.add(point);
+                    case BOX -> boxes.add(point);
                     case ROBOT -> robotLocation = point;
                 }
             }
@@ -69,11 +69,11 @@ public class WarehouseMap {
     }
 
     public boolean wallAt(Point point) {
-        return walls.containsKey(point.key());
+        return walls.contains(point);
     }
 
     public boolean boxAt(Point point) {
-        return boxes.containsKey(point.key());
+        return boxes.contains(point);
     }
 
     public boolean robotAt(Point point) {
@@ -81,17 +81,17 @@ public class WarehouseMap {
     }
 
     public void moveBoxes(Collection<Point> boxesToMove, Direction direction) {
-        boxesToMove.forEach(boxToMove -> boxes.remove(boxToMove.key()));
-        boxesToMove.stream().map(direction::move).forEach(b -> boxes.put(b.key(), b));
+        boxesToMove.forEach(boxes::remove);
+        boxesToMove.stream().map(direction::move).forEach(boxes::add);
     }
 
     public void moveBox(Point from, Point to) {
-        boxes.remove(from.key());
-        boxes.put(to.key(), to);
+        boxes.remove(from);
+        boxes.add(to);
     }
 
     private int getMaxX() {
-        return walls.values().stream().mapToInt(wall -> wall.x).max().orElseThrow();
+        return walls.stream().mapToInt(wall -> wall.x).max().orElseThrow();
     }
 
     private char getToken(Point point) {
@@ -99,7 +99,7 @@ public class WarehouseMap {
     }
 
     public int sumOfAllBoxesGPS() {
-        return boxes.values().stream().mapToInt(this::toGPS).sum();
+        return boxes.stream().mapToInt(this::toGPS).sum();
     }
 
     private int toGPS(Point point) {

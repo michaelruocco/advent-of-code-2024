@@ -65,7 +65,7 @@ public class WarehouseMapXScale2Policy implements WarehouseMapScalePolicy {
         return Stream.of(
                         tryFind(found, direction.move(boxLocation)), tryFind(found, direction.move(boxLocation.east())))
                 .flatMap(Optional::stream)
-                .filter(p -> !p.key().equals(boxLocation.key()))
+                .filter(p -> !p.equals(boxLocation))
                 .toList();
     }
 
