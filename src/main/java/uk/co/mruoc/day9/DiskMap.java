@@ -5,11 +5,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class DiskMap {
 
+    @Getter
     private final List<Block> blocks;
 
     public DiskMap(String input) {
@@ -34,10 +36,6 @@ public class DiskMap {
             }
         }
         return blocks;
-    }
-
-    public DiskMap compact(Compactor compactor) {
-        return compactor.compact(blocks);
     }
 
     public long checksum() {

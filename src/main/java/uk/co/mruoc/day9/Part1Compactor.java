@@ -1,7 +1,6 @@
 package uk.co.mruoc.day9;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -11,8 +10,8 @@ public class Part1Compactor implements Compactor {
     private List<Block> temp;
 
     @Override
-    public DiskMap compact(Collection<Block> blocks) {
-        this.temp = new ArrayList<>(blocks);
+    public DiskMap compact(DiskMap map) {
+        this.temp = new ArrayList<>(map.getBlocks());
         int firstFreeIndex = getFirstFreeBlockIndex(0);
         int lastFileIndex = getLastFileBlockIndex(temp.size() - 1);
 

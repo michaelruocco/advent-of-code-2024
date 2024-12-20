@@ -33,11 +33,7 @@ public class WarehouseMap {
             for (int x = 0; x < line.length(); x++) {
                 char token = line.charAt(x);
                 Point point = new Point(y, x * scalePolicy.getXScale());
-                switch (token) {
-                    case WALL -> walls.add(point);
-                    case BOX -> boxes.add(point);
-                    case ROBOT -> robotLocation = point;
-                }
+                handleToken(token, point);
             }
         }
     }
@@ -88,6 +84,16 @@ public class WarehouseMap {
     public void moveBox(Point from, Point to) {
         boxes.remove(from);
         boxes.add(to);
+    }
+
+    private void handleToken(char token, Point point) {
+        if (token == WALL) {
+            walls.add(point);
+        } else if (token == BOX) {
+            boxes.add(point);
+        } else if (token == ROBOT) {
+            robotLocation = point;
+        }
     }
 
     private int getMaxX() {

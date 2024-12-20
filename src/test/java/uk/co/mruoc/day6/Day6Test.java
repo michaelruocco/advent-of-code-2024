@@ -16,13 +16,14 @@ class Day6Test {
     private static final String EXAMPLE_LOOP_1_PATH = "day-6/example-map-loop-1.txt";
     private static final String EXAMPLE_LOOP_2_PATH = "day-6/example-map-loop-2.txt";
 
-    private final LabMapLoader loader = new LabMapLoader();
+    private final GridLoader loader = new GridLoader();
 
     @ParameterizedTest
     @MethodSource("pathAndExpectedVisitedLocationCount")
     void shouldCountMapPositionsVisitedByGuard(String path, int expectedVisitedLocationCount) {
-        LabMap map = loader.loadMap(path);
-        Guard guard = map.getGuard();
+        Grid grid = loader.loadGrid(path);
+        LabMap map = new LabMap(grid);
+        Guard guard = grid.findGuard();
 
         Result result = guard.patrol(map);
 
@@ -32,8 +33,9 @@ class Day6Test {
     @ParameterizedTest
     @MethodSource("pathAndExpectedState")
     void shouldRecordPathCorrectly(String path, String expectedState) {
-        LabMap map = loader.loadMap(path);
-        Guard guard = map.getGuard();
+        Grid grid = loader.loadGrid(path);
+        LabMap map = new LabMap(grid);
+        Guard guard = grid.findGuard();
 
         Result result = guard.patrol(map);
 
@@ -43,9 +45,11 @@ class Day6Test {
     @ParameterizedTest
     @MethodSource("pathAndExpectedLoopObstructionCount")
     void shouldCountAllSingleObstructionsCausingALoop(String path, long expectedLoopObstructionCount) {
-        LabMap map = loader.loadMap(path);
+        Grid grid = loader.loadGrid(path);
+        LabMap map = new LabMap(grid);
+        Guard guard = grid.findGuard();
 
-        long count = map.countSingleObstructionsCausingLoop();
+        long count = guard.countSingleObstructionsCausingLoop(map);
 
         assertThat(count).isEqualTo(expectedLoopObstructionCount);
     }

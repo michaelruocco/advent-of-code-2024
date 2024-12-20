@@ -10,6 +10,14 @@ public class Guard {
     private final Location initialLocation;
     private final Direction initialDirection;
 
+    public long countSingleObstructionsCausingLoop(LabMap map) {
+        return patrol(map).getVisitedLocations().stream()
+                .map(map::addWallAt)
+                .map(this::patrol)
+                .filter(Result::isStuck)
+                .count();
+    }
+
     public Result patrol(LabMap map) {
         Location location = initialLocation;
         Direction direction = initialDirection;

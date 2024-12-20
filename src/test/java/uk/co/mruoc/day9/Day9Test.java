@@ -40,8 +40,9 @@ class Day9Test {
     void shouldCompactCorrectlyForPart1(String input, String expectedState) {
         DiskMap map = new DiskMap(input);
         System.out.println(map.getState());
+        Compactor compactor = new Part1Compactor();
 
-        DiskMap compacted = map.compact(new Part1Compactor());
+        DiskMap compacted = compactor.compact(map);
 
         assertThat(compacted.getState()).isEqualTo(expectedState);
     }
@@ -58,8 +59,9 @@ class Day9Test {
     void shouldCompactCorrectlyForPart2(String input, String expectedState) {
         DiskMap map = new DiskMap(input);
         System.out.println(map.getState());
+        Compactor compactor = new Part2Compactor();
 
-        DiskMap compacted = map.compact(new Part2Compactor());
+        DiskMap compacted = compactor.compact(map);
 
         assertThat(compacted.getState()).isEqualTo(expectedState);
     }
@@ -75,8 +77,9 @@ class Day9Test {
     })
     void shouldCalculateChecksumCorrectly(String input, String expectedChecksum) {
         DiskMap map = new DiskMap(input);
+        Compactor compactor = new Part1Compactor();
 
-        long checksum = map.compact(new Part1Compactor()).checksum();
+        long checksum = compactor.compact(map).checksum();
 
         assertThat(checksum).isEqualTo(Long.parseLong(expectedChecksum));
     }
@@ -87,7 +90,7 @@ class Day9Test {
         String input = FileLoader.loadContentFromClasspath("day-9/disk-map.txt");
         DiskMap map = new DiskMap(input);
 
-        DiskMap compacted = map.compact(compactor);
+        DiskMap compacted = compactor.compact(map);
 
         assertThat(compacted.checksum()).isEqualTo(expectedChecksum);
     }

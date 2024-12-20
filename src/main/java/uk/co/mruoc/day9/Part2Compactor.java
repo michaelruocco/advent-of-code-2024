@@ -1,7 +1,6 @@
 package uk.co.mruoc.day9;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -14,8 +13,8 @@ public class Part2Compactor implements Compactor {
     private List<Block> temp;
 
     @Override
-    public DiskMap compact(Collection<Block> blocks) {
-        this.temp = new ArrayList<>(blocks);
+    public DiskMap compact(DiskMap map) {
+        this.temp = new ArrayList<>(map.getBlocks());
         Optional<Group> lastFileGroup = findLastFileGroup(temp.size() - 1);
         while (lastFileGroup.isPresent()) {
             trySwap(lastFileGroup.get());

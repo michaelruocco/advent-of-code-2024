@@ -6,13 +6,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
 
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class LabMap {
 
     private final int height;
@@ -21,42 +18,18 @@ public class LabMap {
     @With(AccessLevel.PRIVATE)
     private final Set<Location> walls;
 
-    @Getter
-    private Guard guard;
-
-    public LabMap(char[][] tokens) {
-        this.walls = new HashSet<>();
-        this.height = tokens.length;
-        this.width = tokens[0].length;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                char token = tokens[y][x];
-                if ('#' == token || 'O' == token) {
-                    walls.add(new Location(y, x));
-                } else if (Direction.isDirection(token)) {
-                    guard = new Guard(new Location(y, x), Direction.build(token));
-                }
-            }
-        }
+    public LabMap(Grid grid) {
+        this(grid.getHeight(), grid.getWidth(), grid.getWalls());
     }
 
     public boolean isWallAt(Location location) {
         return walls.contains(location);
     }
 
-    public long countSingleObstructionsCausingLoop() {
-        return guard.patrol(this).getVisitedLocations().stream()
-                .map(this::toNewWalls)
-                .map(this::withWalls)
-                .map(newMap -> guard.patrol(newMap))
-                .filter(Result::isStuck)
-                .count();
-    }
-
-    private Set<Location> toNewWalls(Location location) {
+    public LabMap addWallAt(Location location) {
         Set<Location> newWalls = new HashSet<>(walls);
         newWalls.add(location);
-        return newWalls;
+        return withWalls(newWalls);
     }
 
     public boolean exists(Location location) {
