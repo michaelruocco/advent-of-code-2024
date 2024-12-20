@@ -8,8 +8,8 @@ class StepTest {
 
     @Test
     void shouldReturnTrueIfHaveSameValues() {
-        Step step1 = new Step(new Location(87, 110), '^');
-        Step step2 = new Step(new Location(87, 110), '^');
+        Step step1 = new Step(new Location(87, 110), Direction.NORTH);
+        Step step2 = new Step(new Location(87, 110), Direction.NORTH);
 
         boolean equal = step1.equals(step2);
 

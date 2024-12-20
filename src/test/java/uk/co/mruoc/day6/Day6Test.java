@@ -22,23 +22,22 @@ class Day6Test {
     @MethodSource("pathAndExpectedVisitedLocationCount")
     void shouldCountMapPositionsVisitedByGuard(String path, int expectedVisitedLocationCount) {
         LabMap map = loader.loadMap(path);
-        Guard guard = new Guard(map);
+        Guard guard = map.getGuard();
 
-        guard.patrol();
+        Result result = guard.patrol(map);
 
-        assertThat(guard.getPathSize()).isEqualTo(expectedVisitedLocationCount);
-        assertThat(map.countVisitedLocations()).isEqualTo(expectedVisitedLocationCount);
+        assertThat(result.getVisitedLocationCount()).isEqualTo(expectedVisitedLocationCount);
     }
 
     @ParameterizedTest
     @MethodSource("pathAndExpectedState")
     void shouldRecordPathCorrectly(String path, String expectedState) {
         LabMap map = loader.loadMap(path);
-        Guard guard = new Guard(map);
+        Guard guard = map.getGuard();
 
-        guard.patrol();
+        Result result = guard.patrol(map);
 
-        assertThat(map.getState()).isEqualTo(expectedState);
+        assertThat(map.toState(result.getVisitedLocations())).isEqualTo(expectedState);
     }
 
     @ParameterizedTest
@@ -67,6 +66,6 @@ class Day6Test {
     }
 
     private static Stream<Arguments> pathAndExpectedLoopObstructionCount() {
-        return Stream.of(Arguments.of(EXAMPLE_PATH, 6L) /*, Arguments.of(MAP_PATH, 1434L)*/);
+        return Stream.of(Arguments.of(EXAMPLE_PATH, 6L), Arguments.of(MAP_PATH, 1434L));
     }
 }

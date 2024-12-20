@@ -1,137 +1,88 @@
 package uk.co.mruoc.day6;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.With;
 
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class LabMap {
 
-    private static final char AVAILABLE = '.';
-    private static final char VISITED = 'X';
-    private static final char ADDED_OBSTRUCTION = 'O';
+    private final int height;
+    private final int width;
 
-    private final char[][] tokens;
-    private final char[][] originalTokens;
+    @With(AccessLevel.PRIVATE)
+    private final Set<Location> walls;
+
+    @Getter
+    private Guard guard;
 
     public LabMap(char[][] tokens) {
-        this(tokens, deepCopy(tokens));
-    }
-
-    public long countSingleObstructionsCausingLoop() {
-        performPatrol();
-        return getVisitedLocations().filter(this::isStuckWhenObstructionAdded).count();
-    }
-
-    private boolean isStuckWhenObstructionAdded(Location location) {
-        reset();
-        if (!isAvailable(location)) {
-            return false;
-        }
-        addObstruction(location);
-        Guard guard = performPatrol();
-        return guard.isStuck();
-    }
-
-    private Guard performPatrol() {
-        Guard guard = new Guard(this);
-        guard.patrol();
-        return guard;
-    }
-
-    public void visited(Location location) {
-        setToken(location.y, location.x, VISITED);
-    }
-
-    public void update(Guard guard) {
-        Location location = guard.getLocation();
-        setToken(location.y, location.x, guard.getDirection());
-    }
-
-    public void addObstruction(Location location) {
-        setToken(location.y, location.x, ADDED_OBSTRUCTION);
-    }
-
-    public boolean exists(Location location) {
-        return location.y > -1
-                && location.y < tokens.length
-                && location.x > -1
-                && location.x < tokens[location.y].length;
-    }
-
-    public boolean isAvailable(Location location) {
-        return List.of(AVAILABLE, VISITED).contains(getToken(location.y, location.x));
-    }
-
-    public long countVisitedLocations() {
-        return getVisitedLocations().count();
-    }
-
-    public Stream<Location> getVisitedLocations() {
-        return findAll(this::isVisited);
-    }
-
-    public Optional<Location> find(Predicate<Character> predicate) {
-        return findAll(predicate).findFirst();
-    }
-
-    public Stream<Location> findAll(Predicate<Character> predicate) {
-        Collection<Location> locations = new ArrayList<>();
-        for (int y = 0; y < tokens.length; y++) {
-            for (int x = 0; x < tokens[y].length; x++) {
-                if (predicate.test(getToken(y, x))) {
-                    locations.add(new Location(y, x));
+        this.walls = new HashSet<>();
+        this.height = tokens.length;
+        this.width = tokens[0].length;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                char token = tokens[y][x];
+                if ('#' == token || 'O' == token) {
+                    walls.add(new Location(y, x));
+                } else if (Direction.isDirection(token)) {
+                    guard = new Guard(new Location(y, x), Direction.build(token));
                 }
             }
         }
-        return locations.stream();
     }
 
-    public char getToken(Location location) {
-        return getToken(location.y, location.x);
+    public boolean isWallAt(Location location) {
+        return walls.contains(location);
     }
 
-    public String getState() {
-        return IntStream.range(0, tokens.length)
-                .mapToObj(this::formatRow)
+    public long countSingleObstructionsCausingLoop() {
+        return guard.patrol(this).getVisitedLocations().stream()
+                .map(this::toNewWalls)
+                .map(this::withWalls)
+                .map(newMap -> guard.patrol(newMap))
+                .filter(Result::isStuck)
+                .count();
+    }
+
+    private Set<Location> toNewWalls(Location location) {
+        Set<Location> newWalls = new HashSet<>(walls);
+        newWalls.add(location);
+        return newWalls;
+    }
+
+    public boolean exists(Location location) {
+        return location.y > -1 && location.y < height && location.x > -1 && location.x < width;
+    }
+
+    public String toState(Collection<Location> visited) {
+        return IntStream.range(0, height)
+                .mapToObj(y -> formatRow(y, visited))
                 .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    public void reset() {
-        IntStream.range(0, tokens.length).forEach(this::resetRow);
-    }
-
-    private char getToken(int y, int x) {
-        return tokens[y][x];
-    }
-
-    private void resetRow(int y) {
-        IntStream.range(0, tokens[y].length).forEach(x -> tokens[y][x] = originalTokens[y][x]);
-    }
-
-    private String formatRow(int y) {
-        return IntStream.range(0, tokens[y].length)
-                .mapToObj(x -> getToken(y, x))
-                .map(c -> Character.toString(c))
+    private String formatRow(int y, Collection<Location> visited) {
+        return IntStream.range(0, width)
+                .mapToObj(x -> new Location(y, x))
+                .map(location -> toToken(location, visited))
                 .collect(Collectors.joining());
     }
 
-    private boolean isVisited(char token) {
-        return token == VISITED;
-    }
-
-    private void setToken(int y, int x, char token) {
-        tokens[y][x] = token;
-    }
-
-    private static char[][] deepCopy(char[][] matrix) {
-        return Arrays.stream(matrix).map(char[]::clone).toArray(a -> matrix.clone());
+    private String toToken(Location location, Collection<Location> visited) {
+        if (visited.contains(location)) {
+            return "X";
+        }
+        if (isWallAt(location)) {
+            return "#";
+        }
+        return ".";
     }
 }
