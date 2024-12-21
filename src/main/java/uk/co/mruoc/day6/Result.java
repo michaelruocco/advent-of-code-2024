@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 @Getter
@@ -12,7 +13,7 @@ public class Result {
 
     private final boolean stuck;
     private final Collection<Step> steps;
-    private final Set<Location> visitedLocations;
+    private final Set<Point> visitedLocations;
 
     public Result(boolean stuck, Collection<Step> steps) {
         this.stuck = stuck;

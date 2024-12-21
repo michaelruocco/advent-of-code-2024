@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class LabMap {
@@ -16,40 +17,40 @@ public class LabMap {
     private final int width;
 
     @With(AccessLevel.PRIVATE)
-    private final Set<Location> walls;
+    private final Set<Point> walls;
 
     public LabMap(Grid grid) {
         this(grid.getHeight(), grid.getWidth(), grid.getWalls());
     }
 
-    public boolean isWallAt(Location location) {
+    public boolean isWallAt(Point location) {
         return walls.contains(location);
     }
 
-    public LabMap addWallAt(Location location) {
-        Set<Location> newWalls = new HashSet<>(walls);
+    public LabMap addWallAt(Point location) {
+        Set<Point> newWalls = new HashSet<>(walls);
         newWalls.add(location);
         return withWalls(newWalls);
     }
 
-    public boolean exists(Location location) {
+    public boolean exists(Point location) {
         return location.y > -1 && location.y < height && location.x > -1 && location.x < width;
     }
 
-    public String toState(Collection<Location> visited) {
+    public String toState(Collection<Point> visited) {
         return IntStream.range(0, height)
                 .mapToObj(y -> formatRow(y, visited))
                 .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    private String formatRow(int y, Collection<Location> visited) {
+    private String formatRow(int y, Collection<Point> visited) {
         return IntStream.range(0, width)
-                .mapToObj(x -> new Location(y, x))
+                .mapToObj(x -> new Point(y, x))
                 .map(location -> toToken(location, visited))
                 .collect(Collectors.joining());
     }
 
-    private String toToken(Location location, Collection<Location> visited) {
+    private String toToken(Point location, Collection<Point> visited) {
         if (visited.contains(location)) {
             return "X";
         }

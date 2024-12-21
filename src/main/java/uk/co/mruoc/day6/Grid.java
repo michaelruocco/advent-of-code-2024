@@ -3,6 +3,7 @@ package uk.co.mruoc.day6;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
+import uk.co.mruoc.Point;
 
 public class Grid {
 
@@ -20,12 +21,12 @@ public class Grid {
         this.width = tokens[0].length;
     }
 
-    public Set<Location> getWalls() {
-        Set<Location> walls = new HashSet<>();
+    public Set<Point> getWalls() {
+        Set<Point> walls = new HashSet<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (isWall(tokens[y][x])) {
-                    walls.add(new Location(y, x));
+                    walls.add(new Point(y, x));
                 }
             }
         }
@@ -37,7 +38,7 @@ public class Grid {
             for (int x = 0; x < width; x++) {
                 char token = tokens[y][x];
                 if (Direction.isDirection(token)) {
-                    return new Guard(new Location(y, x), Direction.build(token));
+                    return new Guard(new Point(y, x), Direction.build(token));
                 }
             }
         }

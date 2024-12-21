@@ -3,11 +3,12 @@ package uk.co.mruoc.day6;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class Guard {
 
-    private final Location initialLocation;
+    private final Point initialLocation;
     private final Direction initialDirection;
 
     public long countSingleObstructionsCausingLoop(LabMap map) {
@@ -19,11 +20,11 @@ public class Guard {
     }
 
     public Result patrol(LabMap map) {
-        Location location = initialLocation;
+        Point location = initialLocation;
         Direction direction = initialDirection;
         Set<Step> steps = new HashSet<>();
         while (map.exists(location)) {
-            Location nextLocation = direction.move(location);
+            Point nextLocation = direction.move(location);
             if (map.isWallAt(nextLocation)) {
                 direction = direction.rotate();
             } else {

@@ -2,6 +2,7 @@ package uk.co.mruoc.day6;
 
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public enum Direction {
@@ -12,7 +13,7 @@ public enum Direction {
 
     final char token;
 
-    public Location move(Location location) {
+    public Point move(Point location) {
         return switch (this) {
             case NORTH -> location.north();
             case EAST -> location.east();
