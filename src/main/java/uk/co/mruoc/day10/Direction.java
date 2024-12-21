@@ -1,5 +1,7 @@
 package uk.co.mruoc.day10;
 
+import uk.co.mruoc.Point;
+
 public enum Direction {
     NORTH,
     EAST,

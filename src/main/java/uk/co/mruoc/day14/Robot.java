@@ -2,6 +2,7 @@ package uk.co.mruoc.day14;
 
 import java.util.stream.IntStream;
 import lombok.Builder;
+import uk.co.mruoc.Point;
 
 @Builder
 public class Robot {
@@ -19,10 +20,10 @@ public class Robot {
     }
 
     public void move() {
-        int newY = calculateNewY();
         int newX = calculateNewX();
+        int newY = calculateNewY();
 
-        Point newLocation = new Point(newX, newY);
+        Point newLocation = new Point(newY, newX);
         map.move(location, newLocation);
         location = newLocation;
     }

@@ -3,6 +3,7 @@ package uk.co.mruoc.day4;
 import java.util.Collection;
 import lombok.Builder;
 import org.apache.commons.collections4.CollectionUtils;
+import uk.co.mruoc.Point;
 
 @Builder
 public class WordSearch {

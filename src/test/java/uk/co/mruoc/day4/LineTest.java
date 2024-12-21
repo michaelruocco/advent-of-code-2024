@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 import org.junit.jupiter.api.Test;
+import uk.co.mruoc.Point;
 
 class LineTest {
 

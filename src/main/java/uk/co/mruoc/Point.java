@@ -1,4 +1,4 @@
-package uk.co.mruoc.day15;
+package uk.co.mruoc;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +8,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class Point {
-    final int y;
-    final int x;
-
-    public Point add(Point other) {
-        return new Point(y + other.y, x + other.x);
-    }
+    public final int y;
+    public final int x;
 
     public Point north() {
         return new Point(y - 1, x);

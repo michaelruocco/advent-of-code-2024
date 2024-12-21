@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import uk.co.mruoc.Point;
 import uk.co.mruoc.file.FileLoader;
 
 public class WordSearchLoader {
@@ -32,7 +33,7 @@ public class WordSearchLoader {
 
     private static List<Square> toRowSquares(String s, int y) {
         return IntStream.range(0, s.length())
-                .mapToObj(x -> new Square(s.charAt(x), new Point(x, y)))
+                .mapToObj(x -> new Square(s.charAt(x), new Point(y, x)))
                 .toList();
     }
 

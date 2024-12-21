@@ -15,10 +15,6 @@ public class WarehouseMapLoader {
         this(new WarehouseMapScalePolicyFactory());
     }
 
-    public WarehouseMap load(String path) {
-        return load(path, 1);
-    }
-
     public WarehouseMap load(String path, int scale) {
         Collection<String> lines = FileLoader.loadContentLinesFromClasspath(path);
         return new WarehouseMap(toMapLines(lines), toScalePolicy(scale));

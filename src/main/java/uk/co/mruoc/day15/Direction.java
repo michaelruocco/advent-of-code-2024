@@ -1,6 +1,7 @@
 package uk.co.mruoc.day15;
 
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public enum Direction {

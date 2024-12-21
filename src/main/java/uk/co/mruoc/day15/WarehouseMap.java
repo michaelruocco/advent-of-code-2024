@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import uk.co.mruoc.Point;
 
 public class WarehouseMap {
 

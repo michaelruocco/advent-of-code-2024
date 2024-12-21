@@ -3,6 +3,7 @@ package uk.co.mruoc.day10;
 import java.util.Collection;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class TrailMap {

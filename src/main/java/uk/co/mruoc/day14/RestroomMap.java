@@ -1,6 +1,7 @@
 package uk.co.mruoc.day14;
 
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class RestroomMap {
@@ -29,7 +30,7 @@ public class RestroomMap {
     }
 
     public String getState() {
-        return getState(0, getWidth(), 0, getHeight());
+        return getState(getWidth(), getHeight());
     }
 
     public int getSafetyFactor() {
@@ -73,11 +74,11 @@ public class RestroomMap {
         return count;
     }
 
-    private String getState(int startX, int endX, int startY, int endY) {
+    private String getState(int endX, int endY) {
         StringBuilder state = new StringBuilder();
-        for (int y = startY; y < endY; y++) {
+        for (int y = 0; y < endY; y++) {
             StringBuilder row = new StringBuilder();
-            for (int x = startX; x < endX; x++) {
+            for (int x = 0; x < endX; x++) {
                 int i = grid[y][x];
                 row.append(toChar(i));
             }

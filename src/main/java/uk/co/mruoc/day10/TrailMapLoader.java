@@ -3,6 +3,7 @@ package uk.co.mruoc.day10;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import uk.co.mruoc.Point;
 import uk.co.mruoc.file.FileLoader;
 
 public class TrailMapLoader {

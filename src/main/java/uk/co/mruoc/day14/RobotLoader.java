@@ -3,6 +3,7 @@ package uk.co.mruoc.day14;
 import java.util.Arrays;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 import uk.co.mruoc.file.FileLoader;
 
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class RobotLoader {
 
     private static Point toPoint(String input) {
         int[] ints = toInts(input);
-        return new Point(ints[0], ints[1]);
+        return new Point(ints[1], ints[0]);
     }
 
     private static int[] toInts(String input) {
