@@ -1,5 +1,6 @@
 package uk.co.mruoc.day15;
 
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
 public interface WarehouseMapScalePolicy {

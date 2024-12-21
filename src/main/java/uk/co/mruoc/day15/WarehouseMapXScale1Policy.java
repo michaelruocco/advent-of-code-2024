@@ -5,6 +5,7 @@ import static uk.co.mruoc.day15.Tokens.EMPTY;
 import static uk.co.mruoc.day15.Tokens.ROBOT;
 import static uk.co.mruoc.day15.Tokens.WALL;
 
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
 public class WarehouseMapXScale1Policy implements WarehouseMapScalePolicy {

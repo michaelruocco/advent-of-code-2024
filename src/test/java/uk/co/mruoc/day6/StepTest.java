@@ -3,6 +3,7 @@ package uk.co.mruoc.day6;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
 class StepTest {

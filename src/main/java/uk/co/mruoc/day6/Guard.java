@@ -3,6 +3,7 @@ package uk.co.mruoc.day6;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor

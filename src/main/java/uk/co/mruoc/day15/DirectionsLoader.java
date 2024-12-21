@@ -3,6 +3,7 @@ package uk.co.mruoc.day15;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.file.FileLoader;
 
 public class DirectionsLoader {

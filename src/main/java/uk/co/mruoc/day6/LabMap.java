@@ -6,11 +6,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
 import uk.co.mruoc.Point;
 
-@RequiredArgsConstructor
+@Builder
 public class LabMap {
 
     private final int height;
@@ -18,10 +19,6 @@ public class LabMap {
 
     @With(AccessLevel.PRIVATE)
     private final Set<Point> walls;
-
-    public LabMap(Grid grid) {
-        this(grid.getHeight(), grid.getWidth(), grid.getWalls());
-    }
 
     public boolean isWallAt(Point location) {
         return walls.contains(location);

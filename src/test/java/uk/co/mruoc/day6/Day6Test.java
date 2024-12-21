@@ -22,7 +22,7 @@ class Day6Test {
     @MethodSource("pathAndExpectedVisitedLocationCount")
     void shouldCountMapPositionsVisitedByGuard(String path, int expectedVisitedLocationCount) {
         Grid grid = loader.loadGrid(path);
-        LabMap map = new LabMap(grid);
+        LabMap map = toLabMap(grid);
         Guard guard = grid.findGuard();
 
         Result result = guard.patrol(map);
@@ -34,7 +34,7 @@ class Day6Test {
     @MethodSource("pathAndExpectedState")
     void shouldRecordPathCorrectly(String path, String expectedState) {
         Grid grid = loader.loadGrid(path);
-        LabMap map = new LabMap(grid);
+        LabMap map = toLabMap(grid);
         Guard guard = grid.findGuard();
 
         Result result = guard.patrol(map);
@@ -46,12 +46,20 @@ class Day6Test {
     @MethodSource("pathAndExpectedLoopObstructionCount")
     void shouldCountAllSingleObstructionsCausingALoop(String path, long expectedLoopObstructionCount) {
         Grid grid = loader.loadGrid(path);
-        LabMap map = new LabMap(grid);
+        LabMap map = toLabMap(grid);
         Guard guard = grid.findGuard();
 
         long count = guard.countSingleObstructionsCausingLoop(map);
 
         assertThat(count).isEqualTo(expectedLoopObstructionCount);
+    }
+
+    private static LabMap toLabMap(Grid grid) {
+        return LabMap.builder()
+                .height(grid.getHeight())
+                .width(grid.getWidth())
+                .walls(grid.getWalls())
+                .build();
     }
 
     private static Stream<Arguments> pathAndExpectedVisitedLocationCount() {

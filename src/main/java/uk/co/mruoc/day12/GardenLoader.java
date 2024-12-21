@@ -2,6 +2,7 @@ package uk.co.mruoc.day12;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.GridLoader;
 import uk.co.mruoc.Point;
 

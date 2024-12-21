@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Direction;
 
 @RequiredArgsConstructor
 public class Directions {

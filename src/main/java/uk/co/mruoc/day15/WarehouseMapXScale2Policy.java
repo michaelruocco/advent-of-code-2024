@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
 public class WarehouseMapXScale2Policy implements WarehouseMapScalePolicy {

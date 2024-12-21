@@ -3,6 +3,7 @@ package uk.co.mruoc.day6;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
+import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
 public class Grid {
