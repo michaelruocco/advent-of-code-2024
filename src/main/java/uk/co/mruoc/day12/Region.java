@@ -1,10 +1,14 @@
 package uk.co.mruoc.day12;
 
+import static uk.co.mruoc.day12.CornerCalculator.calculateCorners;
+import static uk.co.mruoc.day12.PerimeterCalculator.calculatePerimeter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 @Getter
@@ -12,7 +16,7 @@ import lombok.ToString;
 public class Region {
 
     private final char plant;
-    private final Collection<Plot> plots;
+    private final Collection<Point> plots;
 
     public Region(char plant) {
         this(plant, new ArrayList<>());
@@ -23,11 +27,11 @@ public class Region {
     }
 
     public int getPerimeter() {
-        return plots.stream().mapToInt(plot -> plot.calculatePerimeter(plots)).sum();
+        return plots.stream().mapToInt(plot -> calculatePerimeter(plot, plots)).sum();
     }
 
     public int getSides() {
-        return plots.stream().mapToInt(plot -> plot.calculateCorners(plots)).sum();
+        return plots.stream().mapToInt(plot -> calculateCorners(plot, plots)).sum();
     }
 
     public int getFencePrice() {
@@ -38,7 +42,7 @@ public class Region {
         return getArea() * getSides();
     }
 
-    public void add(Plot plot) {
+    public void add(Point plot) {
         plots.add(plot);
     }
 }

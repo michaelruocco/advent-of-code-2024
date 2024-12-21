@@ -3,6 +3,7 @@ package uk.co.mruoc.day12;
 import java.util.ArrayList;
 import java.util.Collection;
 import uk.co.mruoc.GridLoader;
+import uk.co.mruoc.Point;
 
 public class GardenLoader {
 
@@ -19,7 +20,7 @@ public class GardenLoader {
                 if (!visited[y][x]) {
                     char currentChar = grid[y][x];
                     Region region = new Region(currentChar);
-                    dfs(new Plot(y, x), grid, visited, currentChar, region);
+                    dfs(new Point(y, x), grid, visited, currentChar, region);
                     regions.add(region);
                 }
             }
@@ -27,18 +28,18 @@ public class GardenLoader {
         return regions;
     }
 
-    private static void dfs(Plot plot, char[][] grid, boolean[][] visited, char c, Region region) {
+    private static void dfs(Point plot, char[][] grid, boolean[][] visited, char c, Region region) {
         visited[plot.y][plot.x] = true;
         region.add(plot);
         for (Direction direction : Direction.values()) {
-            Plot nextPlot = direction.move(plot);
+            Point nextPlot = direction.move(plot);
             if (isInRegion(nextPlot, grid, visited, c)) {
                 dfs(nextPlot, grid, visited, c, region);
             }
         }
     }
 
-    private static boolean isInRegion(Plot plot, char[][] grid, boolean[][] visited, char c) {
+    private static boolean isInRegion(Point plot, char[][] grid, boolean[][] visited, char c) {
         return plot.y >= 0
                 && plot.y < grid.length
                 && plot.x >= 0
