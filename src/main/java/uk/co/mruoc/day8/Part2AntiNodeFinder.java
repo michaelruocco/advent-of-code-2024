@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class Part2AntiNodeFinder implements AntiNodeFinder {
@@ -15,36 +16,36 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
     }
 
     @Override
-    public Collection<Location> toAntiNodes(Pair pair, int gridSize) {
-        Location l1 = pair.l1;
-        Location l2 = pair.l2;
-        if (l1.x == l2.x) {
-            return calculateVerticalLineAntiNodes(l1, gridSize);
+    public Collection<Point> toAntiNodes(Pair pair, int gridSize) {
+        Point p1 = pair.p1;
+        Point p2 = pair.p2;
+        if (p1.x == p2.x) {
+            return calculateVerticalLineAntiNodes(p1, gridSize);
         }
-        if (l1.y == l2.y) {
-            return calculateHorizontalLineAntiNodes(l1, gridSize);
+        if (p1.y == p2.y) {
+            return calculateHorizontalLineAntiNodes(p1, gridSize);
         }
-        return calculateDiagonalLineAntiNodes(l1, l2, gridSize);
+        return calculateDiagonalLineAntiNodes(p1, p2, gridSize);
     }
 
-    private static Collection<Location> calculateVerticalLineAntiNodes(Location l1, int gridSize) {
-        return IntStream.range(0, gridSize).mapToObj(y -> new Location(y, l1.x)).toList();
+    private static Collection<Point> calculateVerticalLineAntiNodes(Point p1, int gridSize) {
+        return IntStream.range(0, gridSize).mapToObj(y -> new Point(y, p1.x)).toList();
     }
 
-    private static Collection<Location> calculateHorizontalLineAntiNodes(Location l1, int gridSize) {
-        return IntStream.range(0, gridSize).mapToObj(x -> new Location(l1.y, x)).toList();
+    private static Collection<Point> calculateHorizontalLineAntiNodes(Point p1, int gridSize) {
+        return IntStream.range(0, gridSize).mapToObj(x -> new Point(p1.y, x)).toList();
     }
 
-    private Collection<Location> calculateDiagonalLineAntiNodes(Location l1, Location l2, int gridSize) {
-        return getAllLinePoints(l1, l2, gridSize);
+    private Collection<Point> calculateDiagonalLineAntiNodes(Point p1, Point p2, int gridSize) {
+        return getAllLinePoints(p1, p2, gridSize);
     }
 
-    private Collection<Location> getAllLinePoints(Location l1, Location l2, int gridSize) {
-        int x1 = l1.x;
-        int y1 = l1.y;
+    private Collection<Point> getAllLinePoints(Point p1, Point p2, int gridSize) {
+        int x1 = p1.x;
+        int y1 = p1.y;
 
-        int x2 = l2.x;
-        int y2 = l2.y;
+        int x2 = p2.x;
+        int y2 = p2.y;
 
         int dx = x2 - x1;
         int dy = y2 - y1;
@@ -56,14 +57,14 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
         int x = x1;
         int y = y1;
 
-        Collection<Location> antiNodes = new HashSet<>();
-        antiNodes.add(new Location(y, x));
+        Collection<Point> antiNodes = new HashSet<>();
+        antiNodes.add(new Point(y, x));
 
         while (boundsChecker.isInGridBounds(gridSize, y, x)) {
             x += dx;
             y += dy;
             if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
-                antiNodes.add(new Location(y, x));
+                antiNodes.add(new Point(y, x));
             }
         }
 
@@ -73,7 +74,7 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
             x -= dx;
             y -= dy;
             if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
-                antiNodes.add(new Location(y, x));
+                antiNodes.add(new Point(y, x));
             }
         }
 

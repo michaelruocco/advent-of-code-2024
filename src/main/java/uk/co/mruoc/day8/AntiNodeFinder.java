@@ -1,7 +1,8 @@
 package uk.co.mruoc.day8;
 
 import java.util.Collection;
+import uk.co.mruoc.Point;
 
 public interface AntiNodeFinder {
-    Collection<Location> toAntiNodes(Pair pair, int gridSize);
+    Collection<Point> toAntiNodes(Pair pair, int gridSize);
 }

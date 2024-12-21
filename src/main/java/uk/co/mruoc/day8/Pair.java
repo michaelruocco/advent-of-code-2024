@@ -2,11 +2,12 @@ package uk.co.mruoc.day8;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 @ToString
 public class Pair {
 
-    final Location l1;
-    final Location l2;
+    final Point p1;
+    final Point p2;
 }

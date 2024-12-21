@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class AntennaMap {
@@ -25,7 +26,7 @@ public class AntennaMap {
         getAntiNodes().forEach(this::populateAntiNodeIfAvailable);
     }
 
-    private Stream<Location> getAntiNodes() {
+    private Stream<Point> getAntiNodes() {
         return getFrequencies().stream()
                 .map(Frequency::toAntiNodes)
                 .flatMap(Collection::stream)
@@ -53,7 +54,7 @@ public class AntennaMap {
                 char token = tokens[y][x];
                 if (token != AVAILABLE) {
                     Frequency frequency = frequencies.getOrDefault(token, new Frequency(antiNodeFinder, size));
-                    frequency.add(new Location(y, x));
+                    frequency.add(new Point(y, x));
                     frequencies.put(token, frequency);
                 }
             }
@@ -61,7 +62,7 @@ public class AntennaMap {
         return frequencies.values();
     }
 
-    private void populateAntiNodeIfAvailable(Location antiNode) {
+    private void populateAntiNodeIfAvailable(Point antiNode) {
         if (tokens[antiNode.y][antiNode.x] == AVAILABLE) {
             tokens[antiNode.y][antiNode.x] = ANTI_NODE;
         }
