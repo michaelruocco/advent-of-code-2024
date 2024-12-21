@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@Builder
 public class Calibration {
 
     @Getter
@@ -27,12 +27,11 @@ public class Calibration {
         for (int i = 0; i < combination.length() - 1; i++) {
             char operator = combination.charAt(i);
             long number = numbers.get(i + 1);
-            if (operator == '+') {
-                result += number;
-            } else if (operator == '*') {
-                result *= number;
-            } else if (operator == '|') {
-                result = Long.parseLong(String.valueOf(result) + number);
+            switch (operator) {
+                case '+' -> result += number;
+                case '*' -> result *= number;
+                case '|' -> result = Long.parseLong(String.valueOf(result) + number);
+                default -> throw new IllegalArgumentException(String.format("%s operator not supported", operator));
             }
         }
         return result;

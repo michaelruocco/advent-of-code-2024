@@ -63,7 +63,7 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
         while (boundsChecker.isInGridBounds(gridSize, y, x)) {
             x += dx;
             y += dy;
-            if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
+            if (boundsChecker.isInGridBounds(gridSize, y, x)) {
                 antiNodes.add(new Point(y, x));
             }
         }
@@ -73,7 +73,7 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
         while (boundsChecker.isInGridBounds(gridSize, y, x)) {
             x -= dx;
             y -= dy;
-            if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
+            if (boundsChecker.isInGridBounds(gridSize, y, x)) {
                 antiNodes.add(new Point(y, x));
             }
         }

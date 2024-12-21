@@ -24,9 +24,11 @@ public class CalibrationsLoader {
 
     public Calibration toCalibration(String line) {
         String[] parts = line.split(":");
-        long testValue = Long.parseLong(parts[0]);
-        List<Long> numbers = toNumbers(parts[1]);
-        return new Calibration(testValue, numbers, operators);
+        return Calibration.builder()
+                .testValue(Long.parseLong(parts[0]))
+                .numbers(toNumbers(parts[1]))
+                .operators(operators)
+                .build();
     }
 
     private static List<Long> toNumbers(String input) {
