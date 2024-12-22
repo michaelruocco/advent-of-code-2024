@@ -31,6 +31,17 @@ class Day16Test {
         assertThat(score).isEqualTo(expectedScore);
     }
 
+    @ParameterizedTest
+    @MethodSource("pathAndExpectedNumberOfTiles")
+    void shouldFindNumberOfTilesOnAnyBestPath(String path, long expectedNumberOfTiles) {
+        Maze maze = new MazeLoader().load(path);
+        Reindeer reindeer = new Reindeer(maze);
+
+        long numberOfTiles = reindeer.findNumberOfTilesOnAnyBestPath();
+
+        assertThat(numberOfTiles).isEqualTo(expectedNumberOfTiles);
+    }
+
     private static Stream<Arguments> pathAndInitialExpectedState() {
         String example1Path = examplePath(1);
         String example2Path = examplePath(2);
@@ -44,6 +55,13 @@ class Day16Test {
                 Arguments.of(examplePath(1), 7036L),
                 Arguments.of(examplePath(2), 11048L),
                 Arguments.of("day-16/puzzle.txt", 99488L));
+    }
+
+    private static Stream<Arguments> pathAndExpectedNumberOfTiles() {
+        return Stream.of(
+                Arguments.of(examplePath(1), 45L),
+                Arguments.of(examplePath(2), 64L),
+                Arguments.of("day-16/puzzle.txt", -1));
     }
 
     private static String examplePath(int number) {

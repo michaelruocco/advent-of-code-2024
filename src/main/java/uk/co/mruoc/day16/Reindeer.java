@@ -51,4 +51,8 @@ public class Reindeer {
                 .min()
                 .orElseThrow();
     }
+
+    public long findNumberOfTilesOnAnyBestPath() {
+        return 0;
+    }
 }
