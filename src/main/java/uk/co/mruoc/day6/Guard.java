@@ -27,7 +27,7 @@ public class Guard {
         while (map.exists(location)) {
             Point nextLocation = direction.move(location);
             if (map.isWallAt(nextLocation)) {
-                direction = direction.rotate();
+                direction = direction.rotateClockwise();
             } else {
                 Step step = new Step(location, direction);
                 if (steps.contains(step)) {

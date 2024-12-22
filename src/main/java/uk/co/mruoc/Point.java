@@ -11,6 +11,14 @@ public class Point {
     public final int y;
     public final int x;
 
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
     public Point north() {
         return new Point(y - 1, x);
     }
