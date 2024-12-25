@@ -84,16 +84,14 @@ public class Reindeer {
                 moves.add(nextMove);
             }
         }
-
-        Collection<ScoredMoveWithPath> lowestScoring = endingMoves.stream()
+        return endingMoves.stream()
                 .collect(Collectors.groupingBy(ScoredMove::getScore, TreeMap::new, Collectors.toList()))
                 .firstEntry()
-                .getValue();
-        Collection<Point> allPaths = lowestScoring.stream()
+                .getValue()
+                .stream()
                 .map(ScoredMoveWithPath::getPath)
                 .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
-        System.out.println(maze.toState(allPaths));
-        return allPaths.size();
+                .collect(Collectors.toSet())
+                .size();
     }
 }
