@@ -1,5 +1,8 @@
 package uk.co.mruoc.day16;
 
+import static uk.co.mruoc.day16.MoveScoreCalculator.toAheadScore;
+import static uk.co.mruoc.day16.MoveScoreCalculator.toRotateScore;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,40 +16,28 @@ import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
+@Getter
 @ToString
-public class ScoredMoveWithPath implements ScoredMove {
+public class PathRetainingScoredMove implements ScoredMove<PathRetainingScoredMove> {
+
     private final Move move;
-
-    @Getter
     private final long score;
-
-    @Getter
     private final Collection<Point> path;
 
-    public ScoredMoveWithPath(Move move, long score) {
+    public PathRetainingScoredMove(Move move, long score) {
         this(move, score, Set.of(move.location));
     }
 
     @Override
-    public Move getMove() {
-        return move;
-    }
-
-    @Override
-    public ScoredMoveWithPath continueAhead() {
+    public PathRetainingScoredMove continueAhead() {
         Set<Point> updatedPath = new HashSet<>(path);
         Move updatedMove = move.perform();
         updatedPath.add(updatedMove.location);
-        return new ScoredMoveWithPath(updatedMove, score + 1, updatedPath);
+        return new PathRetainingScoredMove(updatedMove, toAheadScore(score), updatedPath);
     }
 
     @Override
-    public ScoredMoveWithPath rotate(UnaryOperator<Direction> rotation) {
-        return new ScoredMoveWithPath(move.perform(rotation), score + 1000, path);
-    }
-
-    @Override
-    public Point getLocation() {
-        return move.location;
+    public PathRetainingScoredMove rotate(UnaryOperator<Direction> rotation) {
+        return new PathRetainingScoredMove(move.perform(rotation), toRotateScore(score), path);
     }
 }

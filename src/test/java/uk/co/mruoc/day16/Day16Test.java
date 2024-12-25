@@ -39,7 +39,7 @@ class Day16Test {
         Maze maze = new MazeLoader().load(path);
         Reindeer reindeer = new Reindeer(maze);
 
-        long numberOfTiles = reindeer.findNumberOfTilesOnAnyBestPath();
+        long numberOfTiles = reindeer.findNumberOfLocationsOnAnyBestPath();
 
         assertThat(numberOfTiles).isEqualTo(expectedNumberOfTiles);
     }

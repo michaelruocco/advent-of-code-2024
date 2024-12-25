@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import uk.co.mruoc.Direction;
-import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class Reindeer {
@@ -26,70 +25,66 @@ public class Reindeer {
     }
 
     public long findLowestScore() {
-        Queue<ScoredMove> moves = new PriorityQueue<>(Comparator.comparing(ScoredMove::getScore));
-        moves.add(new DefaultScoredMove(initialMove, 0));
-        Set<Move> seen = new HashSet<>();
-
-        while (!moves.isEmpty()) {
-            ScoredMove currentMove = moves.poll();
-            seen.add(currentMove.getMove());
-            if (maze.endsAt(currentMove.getLocation())) {
-                return currentMove.getScore();
-            }
-
-            ScoredMove nextMove = currentMove.continueAhead();
-            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
-                moves.add(nextMove);
-            }
-
-            nextMove = currentMove.rotate(Direction::rotateClockwise);
-            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
-                moves.add(nextMove);
-            }
-
-            nextMove = currentMove.rotate(Direction::rotateAntiClockwise);
-            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
-                moves.add(nextMove);
-            }
-        }
-        return -1;
+        return toMinScore(findEndingMoves(new DefaultScoredMove(initialMove, 0)));
     }
 
-    public long findNumberOfTilesOnAnyBestPath() {
-        Queue<ScoredMoveWithPath> moves = new PriorityQueue<>(Comparator.comparing(ScoredMove::getScore));
-        moves.add(new ScoredMoveWithPath(initialMove, 0));
+    public long findNumberOfLocationsOnAnyBestPath() {
+        return toUniqueLocations(findEndingMoves(new PathRetainingScoredMove(initialMove, 0)));
+    }
+
+    private <T extends ScoredMove<T>> Collection<T> findEndingMoves(T initialMove) {
+        Queue<T> moves = new PriorityQueue<>(Comparator.comparing(ScoredMove::getScore));
+        moves.add(initialMove);
         Set<Move> seen = new HashSet<>();
-        Set<ScoredMoveWithPath> endingMoves = new HashSet<>();
+        Set<T> endingMoves = new HashSet<>();
 
         while (!moves.isEmpty()) {
-            ScoredMoveWithPath currentMove = moves.poll();
+            T currentMove = moves.poll();
             seen.add(currentMove.getMove());
-
             if (maze.endsAt(currentMove.getLocation())) {
                 endingMoves.add(currentMove);
             }
+            long minScore = toMinScore(endingMoves);
 
-            ScoredMoveWithPath nextMove = currentMove.continueAhead();
-            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+            T nextMove = currentMove.continueAhead();
+            if (nextMove.getScore() <= minScore
+                    && !seen.contains(nextMove.getMove())
+                    && maze.pathAt(nextMove.getLocation())) {
                 moves.add(nextMove);
             }
 
             nextMove = currentMove.rotate(Direction::rotateClockwise);
-            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+            if (nextMove.getScore() <= minScore
+                    && !seen.contains(nextMove.getMove())
+                    && maze.pathAt(nextMove.getLocation())) {
                 moves.add(nextMove);
             }
 
             nextMove = currentMove.rotate(Direction::rotateAntiClockwise);
-            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+            if (nextMove.getScore() <= minScore
+                    && !seen.contains(nextMove.getMove())
+                    && maze.pathAt(nextMove.getLocation())) {
                 moves.add(nextMove);
             }
         }
-        return endingMoves.stream()
+        return endingMoves;
+    }
+
+    private static <T extends ScoredMove<T>> long toMinScore(Collection<T> moves) {
+        return moves.stream()
+                .sorted(Comparator.comparing(ScoredMove::getScore))
+                .map(ScoredMove::getScore)
+                .findFirst()
+                .orElse(Long.MAX_VALUE);
+    }
+
+    private static int toUniqueLocations(Collection<PathRetainingScoredMove> moves) {
+        return moves.stream()
                 .collect(Collectors.groupingBy(ScoredMove::getScore, TreeMap::new, Collectors.toList()))
                 .firstEntry()
                 .getValue()
                 .stream()
-                .map(ScoredMoveWithPath::getPath)
+                .map(PathRetainingScoredMove::getPath)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet())
                 .size();
