@@ -1,12 +1,17 @@
 package uk.co.mruoc.day16;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import uk.co.mruoc.Direction;
+import uk.co.mruoc.Point;
 
 @RequiredArgsConstructor
 public class Reindeer {
@@ -21,38 +26,74 @@ public class Reindeer {
     }
 
     public long findLowestScore() {
-        Map<Move, Long> exploredMoves = new HashMap<>();
-        Map<Move, Long> nextMoves = new LinkedHashMap<>(Map.of(initialMove, 0L));
+        Queue<ScoredMove> moves = new PriorityQueue<>(Comparator.comparing(ScoredMove::getScore));
+        moves.add(new DefaultScoredMove(initialMove, 0));
+        Set<Move> seen = new HashSet<>();
 
-        while (!nextMoves.isEmpty() && exploredMoves.keySet().stream().noneMatch(move -> maze.endsAt(move.location))) {
-            Map.Entry<Move, Long> entry = nextMoves.entrySet().stream()
-                    .min(Map.Entry.comparingByValue())
-                    .orElseThrow();
-            Move nextMove = entry.getKey();
-            long score = entry.getValue();
-            exploredMoves.put(nextMove, score);
-            nextMoves.remove(nextMove);
+        while (!moves.isEmpty()) {
+            ScoredMove currentMove = moves.poll();
+            seen.add(currentMove.getMove());
+            if (maze.endsAt(currentMove.getLocation())) {
+                return currentMove.getScore();
+            }
 
-            Stream.of(
-                            new ScoredMove(
-                                    nextMove.direction.move(nextMove.location), nextMove.direction, score + 1),
-                            new ScoredMove(
-                                    nextMove.location, nextMove.direction.rotateClockwise(), score + 1000),
-                            new ScoredMove(
-                                    nextMove.location, nextMove.direction.rotateAntiClockwise(), score + 1000))
-                    .filter(scoredMove ->
-                            maze.pathAt(scoredMove.move.location) && !exploredMoves.containsKey(scoredMove.move))
-                    .forEach(scoredMove -> nextMoves.put(scoredMove.move, scoredMove.score));
+            ScoredMove nextMove = currentMove.continueAhead();
+            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+                moves.add(nextMove);
+            }
+
+            nextMove = currentMove.rotate(Direction::rotateClockwise);
+            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+                moves.add(nextMove);
+            }
+
+            nextMove = currentMove.rotate(Direction::rotateAntiClockwise);
+            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+                moves.add(nextMove);
+            }
         }
-
-        return exploredMoves.entrySet().stream()
-                .filter(e -> maze.endsAt(e.getKey().location))
-                .mapToLong(Map.Entry::getValue)
-                .min()
-                .orElseThrow();
+        return -1;
     }
 
     public long findNumberOfTilesOnAnyBestPath() {
-        return 0;
+        Queue<ScoredMoveWithPath> moves = new PriorityQueue<>(Comparator.comparing(ScoredMove::getScore));
+        moves.add(new ScoredMoveWithPath(initialMove, 0));
+        Set<Move> seen = new HashSet<>();
+        Set<ScoredMoveWithPath> endingMoves = new HashSet<>();
+
+        while (!moves.isEmpty()) {
+            ScoredMoveWithPath currentMove = moves.poll();
+            seen.add(currentMove.getMove());
+
+            if (maze.endsAt(currentMove.getLocation())) {
+                endingMoves.add(currentMove);
+            }
+
+            ScoredMoveWithPath nextMove = currentMove.continueAhead();
+            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+                moves.add(nextMove);
+            }
+
+            nextMove = currentMove.rotate(Direction::rotateClockwise);
+            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+                moves.add(nextMove);
+            }
+
+            nextMove = currentMove.rotate(Direction::rotateAntiClockwise);
+            if (!seen.contains(nextMove.getMove()) && maze.pathAt(nextMove.getLocation())) {
+                moves.add(nextMove);
+            }
+        }
+
+        Collection<ScoredMoveWithPath> lowestScoring = endingMoves.stream()
+                .collect(Collectors.groupingBy(ScoredMove::getScore, TreeMap::new, Collectors.toList()))
+                .firstEntry()
+                .getValue();
+        Collection<Point> allPaths = lowestScoring.stream()
+                .map(ScoredMoveWithPath::getPath)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
+        System.out.println(maze.toState(allPaths));
+        return allPaths.size();
     }
 }

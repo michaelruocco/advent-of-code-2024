@@ -1,10 +1,10 @@
 package uk.co.mruoc.day16;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
-import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
 @Builder
@@ -28,15 +28,15 @@ public class Maze {
     }
 
     public String toState() {
-        return toState(new Moves());
+        return toState(new ArrayList<>());
     }
 
-    public String toState(Moves moves) {
+    public String toState(Collection<Point> path) {
         StringBuilder state = new StringBuilder();
         for (int y = 0; y < height; y++) {
             StringBuilder row = new StringBuilder();
             for (int x = 0; x < width; x++) {
-                char token = getToken(new Point(y, x), moves);
+                char token = getToken(new Point(y, x), path);
                 row.append(token);
             }
             row.append(System.lineSeparator());
@@ -45,15 +45,14 @@ public class Maze {
         return state.toString();
     }
 
-    private char getToken(Point point, Moves moves) {
+    private char getToken(Point point, Collection<Point> path) {
         if (pathAt(point)) {
-            Optional<Direction> direction = moves.getDirectionAt(point);
-            if (direction.isPresent()) {
-                return direction.get().token;
-            } else if (point.equals(start)) {
+            if (point.equals(start)) {
                 return 'S';
             } else if (endsAt(point)) {
                 return 'E';
+            } else if (path.contains(point)) {
+                return 'O';
             }
             return '.';
         }

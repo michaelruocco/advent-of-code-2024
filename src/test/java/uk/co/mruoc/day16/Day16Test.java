@@ -10,6 +10,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class Day16Test {
 
+    private static final String PUZZLE_PATH = "day-16/puzzle.txt";
+
     @ParameterizedTest
     @MethodSource("pathAndInitialExpectedState")
     void shouldReturnInitialMapState(String path, String expectedState) {
@@ -54,14 +56,12 @@ class Day16Test {
         return Stream.of(
                 Arguments.of(examplePath(1), 7036L),
                 Arguments.of(examplePath(2), 11048L),
-                Arguments.of("day-16/puzzle.txt", 99488L));
+                Arguments.of(PUZZLE_PATH, 99488L));
     }
 
     private static Stream<Arguments> pathAndExpectedNumberOfTiles() {
         return Stream.of(
-                Arguments.of(examplePath(1), 45L),
-                Arguments.of(examplePath(2), 64L),
-                Arguments.of("day-16/puzzle.txt", -1));
+                Arguments.of(examplePath(1), 45L), Arguments.of(examplePath(2), 64L), Arguments.of(PUZZLE_PATH, 516));
     }
 
     private static String examplePath(int number) {
