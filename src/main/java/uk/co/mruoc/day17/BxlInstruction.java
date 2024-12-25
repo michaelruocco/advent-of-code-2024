@@ -15,7 +15,7 @@ public class BxlInstruction extends AbstractBxInstruction {
     }
 
     @Override
-    public int toOperand(int input) {
-        return registers.toValue(input);
+    public int toOperand(int literalOperand) {
+        return literalOperand;
     }
 }

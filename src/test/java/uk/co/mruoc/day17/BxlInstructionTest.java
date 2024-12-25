@@ -8,7 +8,8 @@ class BxlInstructionTest {
 
     @Test
     void shouldCalculateCorrectValue() {
-        Registers registers = Registers.builder().b(29).build();
+        Registers registers = new Registers();
+        registers.setB(29);
         Instruction bxl = new BxlInstruction(registers);
 
         bxl.accept(7);

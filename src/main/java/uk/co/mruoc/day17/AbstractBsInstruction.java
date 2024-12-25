@@ -9,7 +9,7 @@ public abstract class AbstractBsInstruction implements Instruction {
 
     @Override
     public void accept(Integer operand) {
-        handleResult(registers.toValue(operand) % 8);
+        handleResult(registers.toComboOperand(operand) % 8);
     }
 
     protected abstract void handleResult(int result);

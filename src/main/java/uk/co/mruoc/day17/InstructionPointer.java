@@ -16,9 +16,15 @@ public class InstructionPointer {
         return pointer >= program.length - 1;
     }
 
-    public int get() {
-        return program[pointer++];
+    public int[] get() {
+        int[] next = new int[2];
+        next[0] = program[pointer];
+        next[1] = program[pointer + 1];
+        pointer += 2;
+        return next;
     }
 
-    public void jumpTo(int literalOperand) {}
+    public void jump(int operand) {
+        pointer = operand;
+    }
 }

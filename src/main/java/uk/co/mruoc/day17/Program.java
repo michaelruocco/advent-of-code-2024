@@ -1,9 +1,6 @@
 package uk.co.mruoc.day17;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.Builder;
 
 @Builder
@@ -14,14 +11,11 @@ public class Program {
 
     public void execute() {
         while (!pointer.atEnd()) {
-            int opCode = pointer.get();
+            int[] next = pointer.get();
+            int opCode = next[0];
             Instruction instruction = instructions.get(opCode);
-            int operand = pointer.get();
+            int operand = next[1];
             instruction.accept(operand);
         }
-    }
-
-    private static Map<Integer, Instruction> toMap(Collection<Instruction> instructions) {
-        return instructions.stream().collect(Collectors.toMap(Instruction::getOpCode, Function.identity()));
     }
 }

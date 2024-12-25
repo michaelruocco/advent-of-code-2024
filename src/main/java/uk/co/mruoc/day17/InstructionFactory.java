@@ -23,6 +23,7 @@ public class InstructionFactory {
                 new AdvInstruction(registers), // op code 0
                 new BxlInstruction(registers), // op code 1
                 new BstInstruction(registers), // op code 2
+                new JnzInstruction(registers, pointer), // op code 3
                 new BxcInstruction(registers), // op code 4
                 new OutInstruction(registers, output), // op code 5
                 new BdvInstruction(registers), // op code 6
