@@ -9,20 +9,17 @@ import lombok.RequiredArgsConstructor;
 import uk.co.mruoc.file.FileLoader;
 
 @RequiredArgsConstructor
-public class ProgramLoader {
+public class ProgramStateLoader {
 
     private final Output output;
-    private final ProgramFactory factory;
 
-    public ProgramLoader(Output output) {
-        this(output, new ProgramFactory());
-    }
-
-    public Program load(String path) {
+    public ProgramState load(String path) {
         Collection<String> lines = FileLoader.loadContentLinesFromClasspath(path);
-        Registers registers = toRegisters(toRegistryLines(lines));
-        int[] input = toProgramLine(lines).map(ProgramLoader::toInput).orElseThrow();
-        return factory.build(input, registers, output);
+        return ProgramState.builder()
+                .registry(toRegistry(toRegistryLines(lines)))
+                .pointer(toPointer(lines))
+                .output(output)
+                .build();
     }
 
     private static List<String> toRegistryLines(Collection<String> inputLines) {
@@ -31,17 +28,24 @@ public class ProgramLoader {
         return lines.subList(0, splitIndex);
     }
 
-    private static Registers toRegisters(Collection<String> lines) {
-        Registers registers = new Registers();
-        lines.forEach(line -> populate(registers, line));
-        return registers;
+    private static Registry toRegistry(Collection<String> lines) {
+        Registry registry = new Registry();
+        lines.forEach(line -> populate(registry, line));
+        return registry;
     }
 
-    private static void populate(Registers registers, String line) {
+    private static void populate(Registry registry, String line) {
         String[] parts = line.split(" ");
         char id = parts[1].charAt(0);
         int value = Integer.parseInt(parts[2]);
-        registers.setValue(id, value);
+        registry.setValue(id, value);
+    }
+
+    private static Pointer toPointer(Collection<String> lines) {
+        return toProgramLine(lines)
+                .map(ProgramStateLoader::toInput)
+                .map(Pointer::new)
+                .orElseThrow();
     }
 
     private static Optional<String> toProgramLine(Collection<String> inputLines) {

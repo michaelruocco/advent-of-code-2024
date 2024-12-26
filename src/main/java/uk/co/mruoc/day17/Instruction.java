@@ -1,8 +1,8 @@
 package uk.co.mruoc.day17;
 
-import java.util.function.Consumer;
-
-public interface Instruction extends Consumer<Integer> {
+public interface Instruction {
 
     int getOpCode();
+
+    void execute(int literalOperand, ProgramState state);
 }

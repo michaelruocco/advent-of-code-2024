@@ -5,19 +5,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JnzInstruction implements Instruction {
 
-    private final Registers registers;
-    private final InstructionPointer pointer;
-
     @Override
     public int getOpCode() {
         return 3;
     }
 
     @Override
-    public void accept(Integer literalOperand) {
-        if (registers.getA() == 0) {
+    public void execute(int literalOperand, ProgramState state) {
+        Registry registry = state.getRegistry();
+        if (registry.getA() == 0) {
             return;
         }
+        Pointer pointer = state.getPointer();
         pointer.jump(literalOperand);
     }
 }

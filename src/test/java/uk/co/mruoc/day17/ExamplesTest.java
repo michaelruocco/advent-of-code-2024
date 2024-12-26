@@ -6,102 +6,115 @@ import org.junit.jupiter.api.Test;
 
 class ExamplesTest {
 
-    private final Registers registers = new Registers();
+    private final Program program = new Program();
+    private final Registry registry = new Registry();
 
     @Test
     void shouldExecuteExample1Correctly() {
-        ProgramFactory factory = new ProgramFactory();
         Output output = new Output();
-        int[] input = new int[] {2, 6};
-        registers.setC(9);
-        Program program = factory.build(input, registers, output);
+        registry.setC(9);
+        ProgramState state = ProgramState.builder()
+                .pointer(new Pointer(2, 6))
+                .registry(registry)
+                .output(output)
+                .build();
 
-        program.execute();
+        program.execute(state);
 
         assertThat(output).isEmpty();
-        assertThat(registers.getA()).isZero();
-        assertThat(registers.getB()).isEqualTo(1);
-        assertThat(registers.getC()).isEqualTo(9);
+        assertThat(registry.getA()).isZero();
+        assertThat(registry.getB()).isEqualTo(1);
+        assertThat(registry.getC()).isEqualTo(9);
     }
 
     @Test
     void shouldExecuteExample2Correctly() {
-        ProgramFactory factory = new ProgramFactory();
         Output output = new Output();
-        int[] input = new int[] {5, 0, 5, 1, 5, 4};
-        registers.setA(10);
-        Program program = factory.build(input, registers, output);
+        registry.setA(10);
+        ProgramState state = ProgramState.builder()
+                .pointer(new Pointer(5, 0, 5, 1, 5, 4))
+                .registry(registry)
+                .output(output)
+                .build();
 
-        program.execute();
+        program.execute(state);
 
         assertThat(output).containsExactly(0, 1, 2);
-        assertThat(registers.getA()).isEqualTo(10);
-        assertThat(registers.getB()).isZero();
-        assertThat(registers.getC()).isZero();
+        assertThat(registry.getA()).isEqualTo(10);
+        assertThat(registry.getB()).isZero();
+        assertThat(registry.getC()).isZero();
     }
 
     @Test
     void shouldExecuteExample3Correctly() {
-        ProgramFactory factory = new ProgramFactory();
         Output output = new Output();
-        int[] input = new int[] {0, 1, 5, 4, 3, 0};
-        registers.setA(2024);
-        Program program = factory.build(input, registers, output);
+        registry.setA(2024);
+        ProgramState state = ProgramState.builder()
+                .pointer(new Pointer(0, 1, 5, 4, 3, 0))
+                .registry(registry)
+                .output(output)
+                .build();
 
-        program.execute();
+        program.execute(state);
 
         assertThat(output).containsExactly(4, 2, 5, 6, 7, 7, 7, 7, 3, 1, 0);
-        assertThat(registers.getA()).isZero();
-        assertThat(registers.getB()).isZero();
-        assertThat(registers.getC()).isZero();
+        assertThat(registry.getA()).isZero();
+        assertThat(registry.getB()).isZero();
+        assertThat(registry.getC()).isZero();
     }
 
     @Test
     void shouldExecuteExample4Correctly() {
-        ProgramFactory factory = new ProgramFactory();
         Output output = new Output();
-        int[] input = new int[] {1, 7};
-        registers.setB(29);
-        Program program = factory.build(input, registers, output);
+        registry.setB(29);
+        ProgramState state = ProgramState.builder()
+                .pointer(new Pointer(1, 7))
+                .registry(registry)
+                .output(output)
+                .build();
 
-        program.execute();
+        program.execute(state);
 
         assertThat(output).isEmpty();
-        assertThat(registers.getA()).isZero();
-        assertThat(registers.getB()).isEqualTo(26);
-        assertThat(registers.getC()).isZero();
+        assertThat(registry.getA()).isZero();
+        assertThat(registry.getB()).isEqualTo(26);
+        assertThat(registry.getC()).isZero();
     }
 
     @Test
     void shouldExecuteExample5Correctly() {
-        ProgramFactory factory = new ProgramFactory();
         Output output = new Output();
-        int[] input = new int[] {4, 0};
-        registers.setB(2024);
-        registers.setC(43690);
-        Program program = factory.build(input, registers, output);
+        registry.setB(2024);
+        registry.setC(43690);
+        ProgramState state = ProgramState.builder()
+                .pointer(new Pointer(4, 0))
+                .registry(registry)
+                .output(output)
+                .build();
 
-        program.execute();
+        program.execute(state);
 
         assertThat(output).isEmpty();
-        assertThat(registers.getA()).isZero();
-        assertThat(registers.getB()).isEqualTo(44354);
-        assertThat(registers.getC()).isEqualTo(43690);
+        assertThat(registry.getA()).isZero();
+        assertThat(registry.getB()).isEqualTo(44354);
+        assertThat(registry.getC()).isEqualTo(43690);
     }
 
     @Test
     void shouldExecuteExample6Correctly() {
-        ProgramFactory factory = new ProgramFactory();
         Output output = new Output();
-        int[] input = new int[] {0, 1, 5, 4, 3, 0};
-        registers.setA(729);
-        Program program = factory.build(input, registers, output);
+        registry.setA(729);
+        ProgramState state = ProgramState.builder()
+                .pointer(new Pointer(0, 1, 5, 4, 3, 0))
+                .registry(registry)
+                .output(output)
+                .build();
 
-        program.execute();
+        program.execute(state);
 
         assertThat(output).containsExactly(4, 6, 3, 5, 6, 3, 5, 2, 1, 0);
-        assertThat(registers.getA()).isZero();
-        assertThat(registers.getB()).isZero();
-        assertThat(registers.getC()).isZero();
+        assertThat(registry.getA()).isZero();
+        assertThat(registry.getB()).isZero();
+        assertThat(registry.getC()).isZero();
     }
 }

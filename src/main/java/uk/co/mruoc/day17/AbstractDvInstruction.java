@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class AbstractDvInstruction implements Instruction {
 
-    private final Registers registers;
-
     @Override
-    public void accept(Integer operand) {
-        storeResult((int) (registers.getA() / Math.pow(2, registers.toComboOperand(operand))));
+    public void execute(int literalOperand, ProgramState state) {
+        Registry registry = state.getRegistry();
+        int comboOperand = registry.toComboOperand(literalOperand);
+        int result = (int) (registry.getA() / Math.pow(2, comboOperand));
+        storeResult(result, registry);
     }
 
-    protected abstract void storeResult(int result);
+    protected abstract void storeResult(int result, Registry registry);
 }

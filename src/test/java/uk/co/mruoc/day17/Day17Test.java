@@ -9,9 +9,10 @@ class Day17Test {
     @Test
     void part1Test() {
         Output output = new Output();
-        Program program = new ProgramLoader(output).load("day-17/puzzle.txt");
+        Program program = new Program();
+        ProgramState state = new ProgramStateLoader(output).load("day-17/puzzle.txt");
 
-        program.execute();
+        program.execute(state);
 
         assertThat(output.asString()).isEqualTo("7,0,7,3,4,1,3,0,1");
     }

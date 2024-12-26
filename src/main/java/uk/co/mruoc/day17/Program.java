@@ -1,21 +1,25 @@
 package uk.co.mruoc.day17;
 
 import java.util.Map;
-import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
-@Builder
+@RequiredArgsConstructor
 public class Program {
 
-    private final InstructionPointer pointer;
     private final Map<Integer, Instruction> instructions;
 
-    public void execute() {
+    public Program() {
+        this(new Instructions().asMap());
+    }
+
+    public void execute(ProgramState state) {
+        Pointer pointer = state.getPointer();
         while (!pointer.atEnd()) {
             int[] next = pointer.get();
             int opCode = next[0];
             Instruction instruction = instructions.get(opCode);
-            int operand = next[1];
-            instruction.accept(operand);
+            int literalOperand = next[1];
+            instruction.execute(literalOperand, state);
         }
     }
 }

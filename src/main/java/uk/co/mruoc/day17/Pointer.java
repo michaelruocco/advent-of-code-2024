@@ -3,12 +3,12 @@ package uk.co.mruoc.day17;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class InstructionPointer {
+public class Pointer {
 
     private final int[] program;
     private int pointer;
 
-    public InstructionPointer(int... program) {
+    public Pointer(int... program) {
         this(program, 0);
     }
 

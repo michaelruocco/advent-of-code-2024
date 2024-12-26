@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Registers {
+public class Registry {
 
     private static final char A = 'A';
     private static final char B = 'B';
@@ -17,7 +17,7 @@ public class Registers {
 
     private final Map<Character, Integer> values;
 
-    public Registers() {
+    public Registry() {
         this(new HashMap<>());
         setA(0);
         setB(0);

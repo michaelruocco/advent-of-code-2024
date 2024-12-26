@@ -6,16 +6,18 @@ import org.junit.jupiter.api.Test;
 
 class BxlInstructionTest {
 
+    private final Instruction bxl = new BxlInstruction();
+
     @Test
     void shouldCalculateCorrectValue() {
-        Registers registers = new Registers();
-        registers.setB(29);
-        Instruction bxl = new BxlInstruction(registers);
+        Registry registry = new Registry();
+        registry.setB(29);
+        ProgramState state = ProgramState.builder().registry(registry).build();
 
-        bxl.accept(7);
+        bxl.execute(7, state);
 
-        assertThat(registers.getA()).isZero();
-        assertThat(registers.getB()).isEqualTo(26);
-        assertThat(registers.getC()).isZero();
+        assertThat(registry.getA()).isZero();
+        assertThat(registry.getB()).isEqualTo(26);
+        assertThat(registry.getC()).isZero();
     }
 }

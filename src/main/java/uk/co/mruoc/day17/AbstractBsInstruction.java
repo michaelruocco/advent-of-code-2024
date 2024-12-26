@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class AbstractBsInstruction implements Instruction {
 
-    private final Registers registers;
-
     @Override
-    public void accept(Integer operand) {
-        handleResult(registers.toComboOperand(operand) % 8);
+    public void execute(int literalOperand, ProgramState state) {
+        Registry registry = state.getRegistry();
+        int comboOperand = registry.toComboOperand(literalOperand);
+        int result = comboOperand % 8;
+        storeResult(result, state);
     }
 
-    protected abstract void handleResult(int result);
+    protected abstract void storeResult(int result, ProgramState state);
 }
