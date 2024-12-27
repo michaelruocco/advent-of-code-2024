@@ -2,13 +2,12 @@ package uk.co.mruoc.day17;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class Output implements Iterable<Long> {
+public class Output {
 
     private final List<Long> values;
 
@@ -32,10 +31,5 @@ public class Output implements Iterable<Long> {
 
     public String asString() {
         return values.stream().map(i -> Long.toString(i)).collect(Collectors.joining(","));
-    }
-
-    @Override
-    public Iterator<Long> iterator() {
-        return values.iterator();
     }
 }
