@@ -1,8 +1,8 @@
 package uk.co.mruoc.day16;
 
-import static uk.co.mruoc.day16.Maze.END;
-import static uk.co.mruoc.day16.Maze.START;
-import static uk.co.mruoc.day16.Maze.WALL;
+import static uk.co.mruoc.day16.Token.isEnd;
+import static uk.co.mruoc.day16.Token.isStart;
+import static uk.co.mruoc.day16.Token.notWall;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,12 +25,12 @@ public class MazeLoader {
         for (int y = 0; y < tokens.length; y++) {
             for (int x = 0; x < tokens[0].length; x++) {
                 char token = tokens[y][x];
-                if (token != WALL) {
+                if (notWall(token)) {
                     Point point = new Point(y, x);
                     paths.add(point);
-                    if (token == START) {
+                    if (isStart(token)) {
                         start = point;
-                    } else if (token == END) {
+                    } else if (isEnd(token)) {
                         end = point;
                     }
                 }

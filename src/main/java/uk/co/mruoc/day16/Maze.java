@@ -10,10 +10,6 @@ import uk.co.mruoc.Point;
 @Builder
 public class Maze {
 
-    public static final char WALL = '#';
-    public static final char START = 'S';
-    public static final char END = 'E';
-
     private final int height;
     private final int width;
     private final Set<Point> paths;
@@ -52,14 +48,14 @@ public class Maze {
     private char getToken(Point point, Collection<Point> path) {
         if (pathAt(point)) {
             if (point.equals(start)) {
-                return START;
+                return Token.START;
             } else if (endsAt(point)) {
-                return END;
+                return Token.END;
             } else if (path.contains(point)) {
                 return 'O';
             }
             return '.';
         }
-        return WALL;
+        return Token.WALL;
     }
 }
