@@ -54,16 +54,12 @@ public class Reindeer {
             }
 
             nextMove = currentMove.rotate(Direction::rotateClockwise);
-            if (nextMove.getScore() <= minScore
-                    && !seen.contains(nextMove.getMove())
-                    && maze.pathAt(nextMove.getLocation())) {
+            if (nextMove.getScore() <= minScore && !seen.contains(nextMove.getMove())) {
                 moves.add(nextMove);
             }
 
             nextMove = currentMove.rotate(Direction::rotateAntiClockwise);
-            if (nextMove.getScore() <= minScore
-                    && !seen.contains(nextMove.getMove())
-                    && maze.pathAt(nextMove.getLocation())) {
+            if (nextMove.getScore() <= minScore && !seen.contains(nextMove.getMove())) {
                 moves.add(nextMove);
             }
         }

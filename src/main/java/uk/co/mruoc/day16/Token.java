@@ -9,6 +9,7 @@ public class Token {
     public static final char WALL = '#';
     public static final char START = 'S';
     public static final char END = 'E';
+    public static final char FREE = '.';
 
     public static boolean notWall(char token) {
         return WALL != token;

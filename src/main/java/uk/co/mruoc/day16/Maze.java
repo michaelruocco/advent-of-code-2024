@@ -1,7 +1,5 @@
 package uk.co.mruoc.day16;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,15 +26,11 @@ public class Maze {
     }
 
     public String toState() {
-        return toState(new ArrayList<>());
-    }
-
-    public String toState(Collection<Point> path) {
         StringBuilder state = new StringBuilder();
         for (int y = 0; y < height; y++) {
             StringBuilder row = new StringBuilder();
             for (int x = 0; x < width; x++) {
-                char token = getToken(new Point(y, x), path);
+                char token = getToken(new Point(y, x));
                 row.append(token);
             }
             row.append(System.lineSeparator());
@@ -45,16 +39,14 @@ public class Maze {
         return state.toString();
     }
 
-    private char getToken(Point point, Collection<Point> path) {
+    private char getToken(Point point) {
         if (pathAt(point)) {
             if (point.equals(start)) {
                 return Token.START;
             } else if (endsAt(point)) {
                 return Token.END;
-            } else if (path.contains(point)) {
-                return 'O';
             }
-            return '.';
+            return Token.FREE;
         }
         return Token.WALL;
     }
