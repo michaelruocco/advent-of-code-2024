@@ -6,12 +6,11 @@ import lombok.RequiredArgsConstructor;
 public abstract class AbstractBxInstruction implements Instruction {
 
     @Override
-    public void execute(int literalOperand, ProgramState programState) {
-        Registry registry = programState.getRegistry();
-        int b = registry.getB();
-        int operand = toOperand(literalOperand, registry);
-        registry.setB(b ^ operand);
+    public ProgramState execute(int literalOperand, ProgramState state) {
+        long b = state.getB();
+        long operand = toOperand(literalOperand, state);
+        return state.setB(b ^ operand);
     }
 
-    protected abstract int toOperand(int literalOperand, Registry registry);
+    protected abstract long toOperand(int literalOperand, ProgramState state);
 }

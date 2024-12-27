@@ -4,5 +4,5 @@ public interface Instruction {
 
     int getOpCode();
 
-    void execute(int literalOperand, ProgramState state);
+    ProgramState execute(int literalOperand, ProgramState state);
 }

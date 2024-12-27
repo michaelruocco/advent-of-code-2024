@@ -1,30 +1,46 @@
 package uk.co.mruoc.day17;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.With;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
 public class Pointer {
 
     private final int[] program;
-    private int pointer;
+
+    @With
+    private final int ptr;
 
     public Pointer(int... program) {
         this(program, 0);
     }
 
+    public int getProgramLength() {
+        return program.length;
+    }
+
+    public long getProgramValueAt(int index) {
+        return program[index];
+    }
+
     public boolean atEnd() {
-        return pointer >= program.length - 1;
+        return ptr >= program.length - 1;
     }
 
     public int[] get() {
         int[] next = new int[2];
-        next[0] = program[pointer];
-        next[1] = program[pointer + 1];
-        pointer += 2;
+        next[0] = program[ptr];
+        next[1] = program[ptr + 1];
         return next;
     }
 
-    public void jump(int operand) {
-        pointer = operand;
+    public Pointer next() {
+        return withPtr(ptr + 2);
+    }
+
+    public Pointer jump(int operand) {
+        return withPtr(operand);
     }
 }

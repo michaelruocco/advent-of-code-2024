@@ -8,7 +8,7 @@ public class BdvInstruction extends AbstractDvInstruction {
     }
 
     @Override
-    protected void storeResult(int result, Registry registry) {
-        registry.setB(result);
+    protected ProgramState storeResult(long result, ProgramState state) {
+        return state.setB(result);
     }
 }

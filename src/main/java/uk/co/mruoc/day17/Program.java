@@ -12,14 +12,16 @@ public class Program {
         this(new Instructions().asMap());
     }
 
-    public void execute(ProgramState state) {
-        Pointer pointer = state.getPointer();
-        while (!pointer.atEnd()) {
-            int[] next = pointer.get();
+    public ProgramState execute(ProgramState originalState) {
+        ProgramState state = originalState;
+        while (!state.atEnd()) {
+            int[] next = state.getNext();
+            state = state.movePointer();
             int opCode = next[0];
             Instruction instruction = instructions.get(opCode);
             int literalOperand = next[1];
-            instruction.execute(literalOperand, state);
+            state = instruction.execute(literalOperand, state);
         }
+        return state;
     }
 }

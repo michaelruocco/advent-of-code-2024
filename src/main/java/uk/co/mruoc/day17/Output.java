@@ -1,46 +1,41 @@
 package uk.co.mruoc.day17;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class Output implements Iterable<Integer> {
+public class Output implements Iterable<Long> {
 
-    private final List<Integer> values;
+    private final List<Long> values;
+
+    public Output(int... values) {
+        this(Arrays.stream(values).mapToLong(i -> i).boxed().toList());
+    }
 
     public Output() {
         this(new ArrayList<>());
     }
 
-    public void add(Integer value) {
-        this.values.add(value);
+    public long getFirst() {
+        return values.get(0);
+    }
+
+    public Output add(long newValue) {
+        List<Long> updated = new ArrayList<>(values);
+        updated.add(newValue);
+        return new Output(updated);
     }
 
     public String asString() {
-        return values.stream().map(i -> Integer.toString(i)).collect(Collectors.joining(","));
+        return values.stream().map(i -> Long.toString(i)).collect(Collectors.joining(","));
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public Iterator<Long> iterator() {
         return values.iterator();
-    }
-
-    public boolean matches(Output target) {
-        if (target.values.size() > values.size()) {
-            return false;
-        }
-        List<Integer> subList = values.subList(0, target.values.size());
-        for (int i = 0; i < subList.size(); i++) {
-            Integer v1 = subList.get(i);
-            Integer v2 = target.values.get(i);
-            if (!Objects.equals(v1, v2)) {
-                return false;
-            }
-        }
-        return true;
     }
 }

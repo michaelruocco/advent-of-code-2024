@@ -6,12 +6,11 @@ import lombok.RequiredArgsConstructor;
 public abstract class AbstractBsInstruction implements Instruction {
 
     @Override
-    public void execute(int literalOperand, ProgramState state) {
-        Registry registry = state.getRegistry();
-        int comboOperand = registry.toComboOperand(literalOperand);
-        int result = comboOperand % 8;
-        storeResult(result, state);
+    public ProgramState execute(int literalOperand, ProgramState state) {
+        long comboOperand = state.toComboOperand(literalOperand);
+        long result = comboOperand % 8;
+        return storeResult(result, state);
     }
 
-    protected abstract void storeResult(int result, ProgramState state);
+    protected abstract ProgramState storeResult(long result, ProgramState state);
 }

@@ -8,8 +8,7 @@ public class OutInstruction extends AbstractBsInstruction {
     }
 
     @Override
-    protected void storeResult(int result, ProgramState state) {
-        Output output = state.getOutput();
-        output.add(result);
+    protected ProgramState storeResult(long result, ProgramState state) {
+        return state.addToOutput(result);
     }
 }

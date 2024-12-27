@@ -8,8 +8,7 @@ public class BstInstruction extends AbstractBsInstruction {
     }
 
     @Override
-    protected void storeResult(int result, ProgramState programState) {
-        Registry registry = programState.getRegistry();
-        registry.setB(result);
+    protected ProgramState storeResult(long result, ProgramState state) {
+        return state.setB(result);
     }
 }

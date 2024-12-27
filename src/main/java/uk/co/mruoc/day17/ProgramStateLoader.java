@@ -11,14 +11,12 @@ import uk.co.mruoc.file.FileLoader;
 @RequiredArgsConstructor
 public class ProgramStateLoader {
 
-    private final Output output;
-
     public ProgramState load(String path) {
         Collection<String> lines = FileLoader.loadContentLinesFromClasspath(path);
         return ProgramState.builder()
                 .registry(toRegistry(toRegistryLines(lines)))
                 .pointer(toPointer(lines))
-                .output(output)
+                .output(new Output())
                 .build();
     }
 
@@ -28,17 +26,17 @@ public class ProgramStateLoader {
         return lines.subList(0, splitIndex);
     }
 
-    private static Registry toRegistry(Collection<String> lines) {
-        Registry registry = new Registry();
-        lines.forEach(line -> populate(registry, line));
-        return registry;
+    private static Registry toRegistry(List<String> lines) {
+        return Registry.builder()
+                .a(toValue(lines.get(0)))
+                .b(toValue(lines.get(1)))
+                .c(toValue(lines.get(2)))
+                .build();
     }
 
-    private static void populate(Registry registry, String line) {
+    private static long toValue(String line) {
         String[] parts = line.split(" ");
-        char id = parts[1].charAt(0);
-        int value = Integer.parseInt(parts[2]);
-        registry.setValue(id, value);
+        return Long.parseLong(parts[2]);
     }
 
     private static Pointer toPointer(Collection<String> lines) {

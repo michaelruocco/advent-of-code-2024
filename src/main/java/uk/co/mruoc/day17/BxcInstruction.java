@@ -8,7 +8,7 @@ public class BxcInstruction extends AbstractBxInstruction {
     }
 
     @Override
-    protected int toOperand(int literalOperand, Registry registry) {
-        return registry.getC();
+    protected long toOperand(int literalOperand, ProgramState state) {
+        return state.getC();
     }
 }

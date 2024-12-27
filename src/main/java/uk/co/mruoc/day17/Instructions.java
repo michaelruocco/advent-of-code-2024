@@ -14,14 +14,13 @@ public class Instructions {
 
     private Collection<Instruction> build() {
         return List.of(
-                new AdvInstruction(), // op code 0
-                new BxlInstruction(), // op code 1
-                new BstInstruction(), // op code 2
-                new JnzInstruction(), // op code 3
-                new BxcInstruction(), // op code 4
-                new OutInstruction(), // op code 5
-                new BdvInstruction(), // op code 6
-                new CdvInstruction() // op code 7
-                );
+                new AdvInstruction(),
+                new BxlInstruction(),
+                new BstInstruction(),
+                new JnzInstruction(),
+                new BxcInstruction(),
+                new OutInstruction(),
+                new BdvInstruction(),
+                new CdvInstruction());
     }
 }

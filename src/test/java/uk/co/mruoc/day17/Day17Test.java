@@ -6,14 +6,23 @@ import org.junit.jupiter.api.Test;
 
 class Day17Test {
 
+    private final ProgramState initial = new ProgramStateLoader().load("day-17/puzzle.txt");
+
+    private final Program program = new Program();
+
     @Test
     void part1Test() {
-        Output output = new Output();
-        Program program = new Program();
-        ProgramState state = new ProgramStateLoader(output).load("day-17/puzzle.txt");
+        ProgramState result = program.execute(initial);
 
-        program.execute(state);
+        assertThat(result.outputAsString()).isEqualTo("7,0,7,3,4,1,3,0,1");
+    }
 
-        assertThat(output.asString()).isEqualTo("7,0,7,3,4,1,3,0,1");
+    @Test
+    void part2Test() {
+        ProgramFinder finder = new ProgramFinder(program);
+
+        long result = finder.find(initial);
+
+        assertThat(result).isEqualTo(156985331222018L);
     }
 }

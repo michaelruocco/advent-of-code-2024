@@ -10,14 +10,14 @@ class BxlInstructionTest {
 
     @Test
     void shouldCalculateCorrectValue() {
-        Registry registry = new Registry();
-        registry.setB(29);
-        ProgramState state = ProgramState.builder().registry(registry).build();
+        ProgramState initial = ProgramState.builder()
+                .registry(Registry.builder().b(29).build())
+                .build();
 
-        bxl.execute(7, state);
+        ProgramState result = bxl.execute(7, initial);
 
-        assertThat(registry.getA()).isZero();
-        assertThat(registry.getB()).isEqualTo(26);
-        assertThat(registry.getC()).isZero();
+        assertThat(result.getA()).isZero();
+        assertThat(result.getB()).isEqualTo(26);
+        assertThat(result.getC()).isZero();
     }
 }

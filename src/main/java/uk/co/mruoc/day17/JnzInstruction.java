@@ -11,12 +11,10 @@ public class JnzInstruction implements Instruction {
     }
 
     @Override
-    public void execute(int literalOperand, ProgramState state) {
-        Registry registry = state.getRegistry();
-        if (registry.getA() == 0) {
-            return;
+    public ProgramState execute(int literalOperand, ProgramState state) {
+        if (state.getA() == 0) {
+            return state;
         }
-        Pointer pointer = state.getPointer();
-        pointer.jump(literalOperand);
+        return state.jump(literalOperand);
     }
 }

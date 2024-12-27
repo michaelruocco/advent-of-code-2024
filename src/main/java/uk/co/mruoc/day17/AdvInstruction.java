@@ -8,7 +8,7 @@ public class AdvInstruction extends AbstractDvInstruction {
     }
 
     @Override
-    protected void storeResult(int result, Registry registry) {
-        registry.setA(result);
+    protected ProgramState storeResult(long result, ProgramState state) {
+        return state.setA(result);
     }
 }

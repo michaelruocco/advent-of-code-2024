@@ -8,7 +8,7 @@ public class CdvInstruction extends AbstractDvInstruction {
     }
 
     @Override
-    protected void storeResult(int result, Registry registry) {
-        registry.setC(result);
+    protected ProgramState storeResult(long result, ProgramState state) {
+        return state.setC(result);
     }
 }
