@@ -1,7 +1,6 @@
 package uk.co.mruoc.day18;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 import lombok.Builder;
 import uk.co.mruoc.Point;
 import uk.co.mruoc.file.FileLoader;
