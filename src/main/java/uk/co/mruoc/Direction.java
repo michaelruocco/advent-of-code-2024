@@ -17,11 +17,15 @@ public enum Direction {
     public final char token;
 
     public Point move(Point point) {
+        return move(point, 1);
+    }
+
+    public Point move(Point point, int times) {
         return switch (this) {
-            case NORTH -> point.north();
-            case EAST -> point.east();
-            case SOUTH -> point.south();
-            default -> point.west();
+            case NORTH -> point.north(times);
+            case EAST -> point.east(times);
+            case SOUTH -> point.south(times);
+            default -> point.west(times);
         };
     }
 

@@ -20,35 +20,67 @@ public class Point {
     }
 
     public Point north() {
-        return new Point(y - 1, x);
+        return north(1);
     }
 
     public Point east() {
-        return new Point(y, x + 1);
+        return east(1);
     }
 
     public Point south() {
-        return new Point(y + 1, x);
+        return south(1);
     }
 
     public Point west() {
-        return new Point(y, x - 1);
+        return west(1);
     }
 
     public Point northEast() {
-        return new Point(y - 1, x + 1);
+        return northEast(1);
     }
 
     public Point northWest() {
-        return new Point(y - 1, x - 1);
+        return northWest(1);
     }
 
     public Point southEast() {
-        return new Point(y + 1, x + 1);
+        return southEast(1);
     }
 
     public Point southWest() {
-        return new Point(y + 1, x - 1);
+        return southWest(1);
+    }
+
+    public Point north(int times) {
+        return new Point(y - times, x);
+    }
+
+    public Point east(int times) {
+        return new Point(y, x + times);
+    }
+
+    public Point south(int times) {
+        return new Point(y + times, x);
+    }
+
+    public Point west(int times) {
+        return new Point(y, x - times);
+    }
+
+    public Point northEast(int times) {
+        return new Point(y - times, x + times);
+    }
+
+    public Point northWest(int times) {
+        return new Point(y - times, x - times);
+    }
+
+    public Point southEast(int times) {
+        return new Point(y + times, x + times);
+    }
+
+    public Point southWest(int times) {
+        return new Point(y + times, x - times);
     }
 
     public boolean northOf(Point other) {
@@ -65,5 +97,13 @@ public class Point {
 
     public boolean westOf(Point other) {
         return x - 1 == other.x && y == other.y;
+    }
+
+    public Point getVectorTo(Point other) {
+        return new Point(other.y - y, other.x - x);
+    }
+
+    public int getManhattanDistance() {
+        return Math.abs(x) + Math.abs(y);
     }
 }
