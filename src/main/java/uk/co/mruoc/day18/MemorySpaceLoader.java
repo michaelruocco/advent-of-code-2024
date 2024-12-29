@@ -21,7 +21,7 @@ public class MemorySpaceLoader {
     }
 
     private Collection<Point> toBytes(Collection<String> lines) {
-        return lines.stream().map(MemorySpaceLoader::toByte).collect(Collectors.toList());
+        return lines.stream().map(MemorySpaceLoader::toByte).toList();
     }
 
     private static Point toByte(String line) {

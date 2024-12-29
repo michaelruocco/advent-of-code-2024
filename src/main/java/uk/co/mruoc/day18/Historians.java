@@ -39,7 +39,6 @@ public class Historians {
         List<Point> bytes = new ArrayList<>(memorySpace.getBytes());
         int low = 0;
         int high = bytes.size() - 1;
-
         while (low < high) {
             int mid = ((low + high) / 2);
             MemorySpace segment = memorySpace.withMaximumNumberOfBytes(mid + 1);
@@ -49,11 +48,7 @@ public class Historians {
                 low = mid + 1;
             }
         }
-
-        System.out.println("low " + low);
-        Point point = bytes.get(low);
-        System.out.println(point);
-        return Optional.of(point);
+        return Optional.of(bytes.get(low));
     }
 
     private static Collection<Direction> directions() {
