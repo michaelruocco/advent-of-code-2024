@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 import uk.co.mruoc.Direction;
+import uk.co.mruoc.Maze;
 import uk.co.mruoc.Point;
 
 public class PathDistanceFinder {
 
-    public Map<Point, Long> getPathDistances(Track track) {
+    public Map<Point, Long> getPathDistances(Maze track) {
         Point location = track.getStart();
         long distance = 0;
         Map<Point, Long> pathDistances = new HashMap<>(Map.of(location, distance));
@@ -21,7 +22,7 @@ public class PathDistanceFinder {
         return pathDistances;
     }
 
-    private static Point toNextLocation(Point location, Collection<Point> visited, Track track) {
+    private static Point toNextLocation(Point location, Collection<Point> visited, Maze track) {
         return Stream.of(Direction.values())
                 .map(direction -> direction.move(location))
                 .filter(candidateLocation -> !visited.contains(candidateLocation) && track.pathAt(candidateLocation))

@@ -1,4 +1,4 @@
-package uk.co.mruoc.day16;
+package uk.co.mruoc;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

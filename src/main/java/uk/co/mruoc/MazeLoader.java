@@ -1,13 +1,11 @@
-package uk.co.mruoc.day16;
+package uk.co.mruoc;
 
-import static uk.co.mruoc.day16.Token.isEnd;
-import static uk.co.mruoc.day16.Token.isStart;
-import static uk.co.mruoc.day16.Token.notWall;
+import static uk.co.mruoc.Token.isEnd;
+import static uk.co.mruoc.Token.isStart;
+import static uk.co.mruoc.Token.notWall;
 
 import java.util.HashSet;
 import java.util.Set;
-import uk.co.mruoc.GridLoader;
-import uk.co.mruoc.Point;
 
 public class MazeLoader {
 

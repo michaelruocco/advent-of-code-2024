@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import uk.co.mruoc.Direction;
+import uk.co.mruoc.Maze;
 
 @RequiredArgsConstructor
 public class Reindeer {

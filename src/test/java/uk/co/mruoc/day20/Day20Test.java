@@ -6,18 +6,20 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import uk.co.mruoc.Maze;
+import uk.co.mruoc.MazeLoader;
 
 class Day20Test {
 
     private static final String EXAMPLE_PATH = "day-20/example-1.txt";
     private static final String PUZZLE_PATH = "day-20/puzzle.txt";
 
-    private static final TrackLoader LOADER = new TrackLoader();
+    private static final MazeLoader LOADER = new MazeLoader();
 
     @ParameterizedTest
     @MethodSource("trackAndCounterAndRequiredSavingAndExpectedResult")
     void shouldReturnNumberOfCheatsThatSave(
-            Track track, CheatCounter counter, long requiredSaving, long expectedResult) {
+            Maze track, CheatCounter counter, long requiredSaving, long expectedResult) {
         CheatFinder finder = new CheatFinder(counter);
 
         long result = finder.countCheatsThatSave(track, requiredSaving);
@@ -26,8 +28,8 @@ class Day20Test {
     }
 
     private static Stream<Arguments> trackAndCounterAndRequiredSavingAndExpectedResult() {
-        Track exampleTrack = LOADER.load(EXAMPLE_PATH);
-        Track puzzleTrack = LOADER.load(PUZZLE_PATH);
+        Maze exampleTrack = LOADER.load(EXAMPLE_PATH);
+        Maze puzzleTrack = LOADER.load(PUZZLE_PATH);
         CheatCounter part1Counter = new Part1CheatCounter();
         CheatCounter part2Counter = new Part2CheatCounter();
         return Stream.of(

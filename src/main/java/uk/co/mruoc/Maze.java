@@ -1,9 +1,8 @@
-package uk.co.mruoc.day16;
+package uk.co.mruoc;
 
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
-import uk.co.mruoc.Point;
 
 @Builder
 public class Maze {
