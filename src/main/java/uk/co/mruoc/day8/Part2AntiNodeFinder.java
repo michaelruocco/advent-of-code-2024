@@ -50,7 +50,7 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
         int dx = x2 - x1;
         int dy = y2 - y1;
 
-        int gcd = gcd(Math.abs(dx), Math.abs(dy));
+        int gcd = gcd(dx, dy);
         dx /= gcd;
         dy /= gcd;
 
@@ -81,7 +81,9 @@ public class Part2AntiNodeFinder implements AntiNodeFinder {
         return antiNodes;
     }
 
-    private static int gcd(int a, int b) {
+    private static int gcd(int inA, int inB) {
+        int a = Math.abs(inA);
+        int b = Math.abs(inB);
         while (b != 0) {
             int temp = b;
             b = a % b;

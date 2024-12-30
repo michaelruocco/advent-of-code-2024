@@ -1,10 +1,6 @@
 package uk.co.mruoc;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -47,17 +43,15 @@ public enum Direction {
         };
     }
 
-    private static final Map<Character, Direction> MAP = toMap();
-
-    public static Direction build(char c) {
-        return Optional.ofNullable(MAP.get(c)).orElseThrow();
+    public static Direction get(char c) {
+        return stream().filter(d -> d.token == c).findFirst().orElseThrow();
     }
 
     public static boolean isDirection(char c) {
-        return MAP.containsKey(c);
+        return stream().map(d -> d.token).toList().contains(c);
     }
 
-    private static Map<Character, Direction> toMap() {
-        return Arrays.stream(values()).collect(Collectors.toMap(d -> d.token, Function.identity()));
+    private static Stream<Direction> stream() {
+        return Stream.of(Direction.values());
     }
 }

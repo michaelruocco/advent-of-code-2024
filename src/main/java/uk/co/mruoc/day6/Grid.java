@@ -39,7 +39,7 @@ public class Grid {
             for (int x = 0; x < width; x++) {
                 char token = tokens[y][x];
                 if (Direction.isDirection(token)) {
-                    return new Guard(new Point(y, x), Direction.build(token));
+                    return new Guard(new Point(y, x), Direction.get(token));
                 }
             }
         }

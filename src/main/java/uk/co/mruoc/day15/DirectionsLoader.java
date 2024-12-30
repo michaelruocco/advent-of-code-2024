@@ -27,6 +27,6 @@ public class DirectionsLoader {
     }
 
     private static Collection<Direction> toDirections(String line) {
-        return line.chars().mapToObj(c -> (char) c).map(Direction::build).toList();
+        return line.chars().mapToObj(c -> (char) c).map(Direction::get).toList();
     }
 }
