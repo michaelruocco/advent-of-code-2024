@@ -15,7 +15,11 @@ import java.util.stream.Stream;
 import uk.co.mruoc.Direction;
 import uk.co.mruoc.Point;
 
-public class WarehouseMapXScale2Policy implements WarehouseMapScalePolicy {
+public class XScale2WarehouseMap extends AbstractWarehouseMap {
+
+    public XScale2WarehouseMap(List<String> lines) {
+        super(lines);
+    }
 
     @Override
     public int getXScale() {
@@ -23,41 +27,41 @@ public class WarehouseMapXScale2Policy implements WarehouseMapScalePolicy {
     }
 
     @Override
-    public void move(WarehouseMap map, Direction direction) {
-        Point nextRobotLocation = direction.move(map.getRobotLocation());
-        if (tryFind(map::wallAt, nextRobotLocation).isPresent()) {
+    public void move(Direction direction) {
+        Point nextRobotLocation = direction.move(getRobotLocation());
+        if (tryFind(this::wallAt, nextRobotLocation).isPresent()) {
             return;
         }
-        Optional<Point> nextBoxLocation = tryFind(map::boxAt, nextRobotLocation);
+        Optional<Point> nextBoxLocation = tryFind(this::boxAt, nextRobotLocation);
         if (nextBoxLocation.isPresent()) {
             Collection<Point> boxesToMove = new ArrayList<>();
             List<Point> nextBoxes = new ArrayList<>(List.of(nextBoxLocation.get()));
             while (!nextBoxes.isEmpty()) {
                 Point nextBox = nextBoxes.remove(0);
                 boxesToMove.add(nextBox);
-                if (!findInBoxPath(map::wallAt, nextBox, direction).isEmpty()) {
+                if (!findInBoxPath(this::wallAt, nextBox, direction).isEmpty()) {
                     return;
                 }
-                nextBoxes.addAll(findInBoxPath(map::boxAt, nextBox, direction));
+                nextBoxes.addAll(findInBoxPath(this::boxAt, nextBox, direction));
             }
-            map.moveBoxes(boxesToMove, direction);
+            moveBoxes(boxesToMove, direction);
         }
-        map.setRobotLocation(nextRobotLocation);
+        setRobotLocation(nextRobotLocation);
     }
 
     @Override
-    public char getToken(WarehouseMap map, Point point) {
+    public char getToken(Point point) {
         Point westPoint = point.west();
-        if (map.wallAt(point) || map.wallAt(westPoint)) {
+        if (wallAt(point) || wallAt(westPoint)) {
             return WALL;
         }
-        if (map.boxAt(point)) {
+        if (boxAt(point)) {
             return WEST_BOX;
         }
-        if (map.boxAt(westPoint)) {
+        if (boxAt(westPoint)) {
             return EAST_BOX;
         }
-        if (map.getRobotLocation().equals(point)) {
+        if (getRobotLocation().equals(point)) {
             return ROBOT;
         }
         return EMPTY;

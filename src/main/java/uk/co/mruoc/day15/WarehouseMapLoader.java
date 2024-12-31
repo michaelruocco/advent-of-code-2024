@@ -9,19 +9,15 @@ import uk.co.mruoc.file.FileLoader;
 @RequiredArgsConstructor
 public class WarehouseMapLoader {
 
-    private final WarehouseMapScalePolicyFactory scalePolicyFactory;
+    private final WarehouseMapFactory factory;
 
     public WarehouseMapLoader() {
-        this(new WarehouseMapScalePolicyFactory());
+        this(new WarehouseMapFactory());
     }
 
     public WarehouseMap load(String path, int scale) {
         Collection<String> lines = FileLoader.loadContentLinesFromClasspath(path);
-        return new WarehouseMap(toMapLines(lines), toScalePolicy(scale));
-    }
-
-    private WarehouseMapScalePolicy toScalePolicy(int scale) {
-        return scalePolicyFactory.build(scale);
+        return factory.build(toMapLines(lines), scale);
     }
 
     private static List<String> toMapLines(Collection<String> inputLines) {
