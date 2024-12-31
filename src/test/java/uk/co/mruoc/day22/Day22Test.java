@@ -23,7 +23,7 @@ class Day22Test {
     void shouldCalculateMostBananasForEachBuyer() {
         Collection<Long> inputs = loadInputs();
 
-        long result = calculator.calculateMostBananas1(inputs);
+        long result = calculator.calculateMostBananas(inputs);
 
         assertThat(result).isEqualTo(1931);
     }

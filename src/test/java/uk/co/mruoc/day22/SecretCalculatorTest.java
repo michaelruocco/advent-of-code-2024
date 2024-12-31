@@ -18,12 +18,12 @@ class SecretCalculatorTest {
     void shouldCalculateNextNSecretNumbers() {
         long input = 123;
 
-        Collection<Long> secrets = calculator.calculateNextN(input, 10);
+        long[] secrets = calculator.calculateNextN(input, 10);
 
         assertThat(secrets)
                 .containsExactly(
-                        15887950L, 16495136L, 527345L, 704524L, 1553684L, 12683156L, 11100544L, 12249484L, 7753432L,
-                        5908254L);
+                        123L, 15887950L, 16495136L, 527345L, 704524L, 1553684L, 12683156L, 11100544L, 12249484L,
+                        7753432L, 5908254L);
     }
 
     @ParameterizedTest
@@ -47,7 +47,7 @@ class SecretCalculatorTest {
     void shouldCalculateMostBananas() {
         Collection<Long> inputs = List.of(1L, 2L, 3L, 2024L);
 
-        long most = calculator.calculateMostBananas1(inputs);
+        long most = calculator.calculateMostBananas(inputs);
 
         assertThat(most).isEqualTo(23);
     }

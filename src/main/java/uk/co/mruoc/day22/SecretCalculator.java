@@ -3,7 +3,6 @@ package uk.co.mruoc.day22;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +17,12 @@ public class SecretCalculator {
         this(2000, new HashMap<>());
     }
 
-    public long calculateMostBananas1(Collection<Long> inputs) {
+    public long calculateMostBananas(Collection<Long> inputs) {
         // Store sequences for all buyers
         Map<String, List<Long>> sequencesForAllBuyers = new HashMap<>();
 
         for (long secretNumber : inputs) {
-            Map<String, Long> sequencesForBuyer = generateSecretNumbers(secretNumber, 2000);
+            Map<String, Long> sequencesForBuyer = generateSecretNumbers(secretNumber);
 
             // Add sequences to the overall map
             for (Map.Entry<String, Long> entry : sequencesForBuyer.entrySet()) {
@@ -47,40 +46,6 @@ public class SecretCalculator {
         return bestTotal;
     }
 
-    public Map<String, Long> generateSecretNumbers(long secretNumber, int n) {
-        Map<String, Long> sequences = new HashMap<>();
-        long[] secretNumbers = new long[n + 1];
-
-        // Generate the sequence of secret numbers
-        for (int i = 0; i < n; i++) {
-            secretNumbers[i] = secretNumber;
-            secretNumber = calculate(secretNumber);
-        }
-        secretNumbers[n] = secretNumber;
-
-        // Reduce each secret number mod 10
-        for (int i = 0; i < secretNumbers.length; i++) {
-            secretNumbers[i] %= 10;
-        }
-
-        String[] diffs = new String[n + 1];
-        // Calculate differences
-        for (int i = 1; i < secretNumbers.length; i++) {
-            diffs[i] = Long.toString(secretNumbers[i] - secretNumbers[i - 1]);
-        }
-
-        // Store unique sequences
-        for (int i = 1; i < diffs.length - 4; i++) {
-            String[] sequence = {diffs[i], diffs[i + 1], diffs[i + 2], diffs[i + 3]};
-            String key = String.join(",", sequence);
-            if (!sequences.containsKey(key)) {
-                sequences.put(key, secretNumbers[i + 3]);
-            }
-        }
-
-        return sequences;
-    }
-
     public Long calculateSumOfLastOfDay(Collection<Long> inputs) {
         return inputs.stream().mapToLong(this::calculateLastOfDay).sum();
     }
@@ -97,13 +62,14 @@ public class SecretCalculator {
         return secret;
     }
 
-    public Collection<Long> calculateNextN(long input, int n) {
-        LinkedList<Long> secrets = new LinkedList<>();
-        secrets.add(input);
+    public long[] calculateNextN(long input, int n) {
+        long number = input;
+        long[] secrets = new long[n + 1];
         for (int i = 0; i < n; i++) {
-            secrets.add(calculate(secrets.getLast()));
+            secrets[i] = number;
+            number = calculate(number);
         }
-        secrets.removeFirst();
+        secrets[n] = number;
         return secrets;
     }
 
@@ -114,6 +80,33 @@ public class SecretCalculator {
             number = step2(number);
             return step3(number);
         });
+    }
+
+    private Map<String, Long> generateSecretNumbers(long secretNumber) {
+        Map<String, Long> sequences = new HashMap<>();
+        long[] secretNumbers = calculateNextN(secretNumber, numbersInDay);
+
+        // Reduce each secret number mod 10
+        for (int i = 0; i < secretNumbers.length; i++) {
+            secretNumbers[i] %= 10;
+        }
+
+        // Calculate differences
+        String[] diffs = new String[numbersInDay + 1];
+        for (int i = 1; i < secretNumbers.length; i++) {
+            diffs[i] = Long.toString(secretNumbers[i] - secretNumbers[i - 1]);
+        }
+
+        // Store unique sequences
+        for (int i = 1; i < diffs.length - 4; i++) {
+            String[] sequence = {diffs[i], diffs[i + 1], diffs[i + 2], diffs[i + 3]};
+            String key = String.join(",", sequence);
+            if (!sequences.containsKey(key)) {
+                sequences.put(key, secretNumbers[i + 3]);
+            }
+        }
+
+        return sequences;
     }
 
     private static long step1(long i) {
