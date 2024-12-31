@@ -14,6 +14,22 @@ import uk.co.mruoc.Point;
 @RequiredArgsConstructor
 public class Historians {
 
+    public Optional<Point> findFirstBlocker(MemorySpace memorySpace) {
+        List<Point> bytes = new ArrayList<>(memorySpace.getBytes());
+        int low = 0;
+        int high = bytes.size() - 1;
+        while (low < high) {
+            int mid = ((low + high) / 2);
+            MemorySpace segment = memorySpace.withMaximumNumberOfBytes(mid + 1);
+            if (getMinimumNumberOfStepsToEnd(segment) == -1) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return Optional.of(bytes.get(low));
+    }
+
     public int getMinimumNumberOfStepsToEnd(MemorySpace memorySpace) {
         Point location = memorySpace.getStart();
         LinkedList<Step> steps = new LinkedList<>(List.of(new Step(location, 0)));
@@ -33,22 +49,6 @@ public class Historians {
             }
         }
         return -1;
-    }
-
-    public Optional<Point> findFirstBlocker(MemorySpace memorySpace) {
-        List<Point> bytes = new ArrayList<>(memorySpace.getBytes());
-        int low = 0;
-        int high = bytes.size() - 1;
-        while (low < high) {
-            int mid = ((low + high) / 2);
-            MemorySpace segment = memorySpace.withMaximumNumberOfBytes(mid + 1);
-            if (getMinimumNumberOfStepsToEnd(segment) == -1) {
-                high = mid;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return Optional.of(bytes.get(low));
     }
 
     private static Collection<Direction> directions() {
