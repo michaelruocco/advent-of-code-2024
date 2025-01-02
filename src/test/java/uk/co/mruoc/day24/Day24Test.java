@@ -19,7 +19,7 @@ class Day24Test {
 
         gates.execute(wires);
 
-        assertThat(wires.getDecimalValue()).isEqualTo(expectedResult);
+        assertThat(wires.getDecimalValue('z')).isEqualTo(expectedResult);
     }
 
     @ParameterizedTest

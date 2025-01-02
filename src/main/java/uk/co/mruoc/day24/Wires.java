@@ -1,6 +1,7 @@
 package uk.co.mruoc.day24;
 
 import static java.util.Comparator.reverseOrder;
+import static uk.co.mruoc.day24.WireConverter.toWireId;
 
 import java.util.Collection;
 import java.util.Map;
@@ -21,26 +22,22 @@ public class Wires {
         return values.get(wire);
     }
 
-    public long getDecimalValue() {
-        return toDecimal(getBinaryValue());
+    public long getDecimalValue(char wireId) {
+        return toDecimal(getBinaryValue(wireId));
     }
 
-    public String getFinalBit(char c) {
-        return getWires(c).findFirst().orElseThrow();
-    }
-
-    private String getBinaryValue() {
-        return getBinaryNumberWires().stream()
+    private String getBinaryValue(char wireId) {
+        return getBinaryNumberWires(wireId).stream()
                 .map(wire -> Integer.toString(values.get(wire)))
                 .collect(Collectors.joining());
     }
 
-    private Collection<String> getBinaryNumberWires() {
-        return getWires('z').toList();
+    private Collection<String> getBinaryNumberWires(char wireId) {
+        return getWires(wireId).toList();
     }
 
-    private Stream<String> getWires(char c) {
-        return values.keySet().stream().filter(key -> key.charAt(0) == c).sorted(reverseOrder());
+    private Stream<String> getWires(char wireId) {
+        return values.keySet().stream().filter(wire -> toWireId(wire) == wireId).sorted(reverseOrder());
     }
 
     private static long toDecimal(String binaryNumber) {
