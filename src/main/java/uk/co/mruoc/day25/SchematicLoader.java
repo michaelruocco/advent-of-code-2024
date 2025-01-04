@@ -16,18 +16,14 @@ public class SchematicLoader {
         Collection<Schematic> schematics = new ArrayList<>();
         List<String> schematic = new ArrayList<>();
         lines.forEach(line -> process(line, schematic, schematics));
-        if (!schematic.isEmpty()) {
-            schematics.add(toSchematic(schematic));
-        }
+        schematics.add(toSchematic(schematic));
         return schematics;
     }
 
     private static void process(String line, Collection<String> schematic, Collection<Schematic> schematics) {
         if (line.isEmpty()) {
-            if (!schematic.isEmpty()) {
-                schematics.add(toSchematic(schematic));
-                schematic.clear();
-            }
+            schematics.add(toSchematic(schematic));
+            schematic.clear();
         } else {
             schematic.add(line);
         }
