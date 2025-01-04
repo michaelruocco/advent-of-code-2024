@@ -21,7 +21,7 @@ public class MulCalculator {
                 enabled = true;
             } else if (isDont(instruction)) {
                 enabled = false;
-            } else if (enabled && isMul(matcher)) {
+            } else if (enabled) {
                 result += calculateMul(matcher);
             }
             currentIndex = matcher.end();
@@ -36,11 +36,6 @@ public class MulCalculator {
 
     private static boolean isDont(String instruction) {
         return instruction.equals("don't()");
-    }
-
-    private static boolean isMul(Matcher matcher) {
-        String instruction = matcher.group(0);
-        return instruction.matches("mul\\(\\d{1,3},\\d{1,3}\\)");
     }
 
     private static int calculateMul(Matcher matcher) {
