@@ -56,7 +56,7 @@ public class WordSearchLoader {
     private static Collection<Line> toTopLeftToBottomRightDiagonals(int width, int height, List<Line> rows) {
         return Stream.concat(
                         toTopHalfTopLeftToBottomRightDiagonals(width, rows),
-                        toBottomHalfTopLeftToBottomRightDiagonals(width, height, rows))
+                        toBottomHalfTopLeftToBottomRightDiagonals(height, rows))
                 .toList();
     }
 
@@ -73,12 +73,12 @@ public class WordSearchLoader {
         return new Line(squares);
     }
 
-    private static Stream<Line> toBottomHalfTopLeftToBottomRightDiagonals(int width, int height, List<Line> rows) {
+    private static Stream<Line> toBottomHalfTopLeftToBottomRightDiagonals(int height, List<Line> rows) {
         return IntStream.range(1, height)
-                .mapToObj(row -> toBottomHalfTopLeftToBottomRightDiagonalLine(width, height, row, rows));
+                .mapToObj(row -> toBottomHalfTopLeftToBottomRightDiagonalLine(height, row, rows));
     }
 
-    private static Line toBottomHalfTopLeftToBottomRightDiagonalLine(int width, int height, int row, List<Line> rows) {
+    private static Line toBottomHalfTopLeftToBottomRightDiagonalLine(int height, int row, List<Line> rows) {
         List<Square> squares = new ArrayList<>();
         for (int x = 0, y = row; y < height; x++, y++) {
             squares.add(new Square(rows.get(x).charAt(y), new Point(y, x)));
