@@ -2,6 +2,8 @@ package uk.co.mruoc.day9;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -36,11 +38,10 @@ public class Part1Compactor implements Compactor {
     }
 
     private int getLastFileBlockIndex(int end) {
-        for (int i = end; i > -1; i--) {
-            if (!temp.get(i).isFree()) {
-                return i;
-            }
-        }
-        return -1;
+        return IntStream.rangeClosed(0, end)
+                .map(i -> end - i)
+                .filter(i -> !temp.get(i).isFree())
+                .findFirst()
+                .orElse(-1);
     }
 }
