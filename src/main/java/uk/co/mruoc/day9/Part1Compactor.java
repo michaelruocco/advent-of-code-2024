@@ -3,7 +3,6 @@ package uk.co.mruoc.day9;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

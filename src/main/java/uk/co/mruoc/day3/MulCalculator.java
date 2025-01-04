@@ -21,7 +21,7 @@ public class MulCalculator {
                 enabled = true;
             } else if (isDont(instruction)) {
                 enabled = false;
-            } else if (isMul(matcher) && enabled) {
+            } else if (enabled && isMul(matcher)) {
                 result += calculateMul(matcher);
             }
             currentIndex = matcher.end();
