@@ -4,6 +4,7 @@ import static uk.co.mruoc.day24.WireConverter.toWireId;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -81,15 +82,10 @@ public class Gate {
     }
 
     private boolean consumesFrom(Collection<Character> wireIds) {
-        return consumesFrom(in1, wireIds) && consumesFrom(in2, wireIds);
+        return Stream.of(in1, in2).map(WireConverter::toWireId).anyMatch(wireIds::contains);
     }
 
     private boolean inputsAreFirstBit() {
-        return in1.endsWith("00") && in2.endsWith("00");
-    }
-
-    private static boolean consumesFrom(String wire, Collection<Character> inputWireIds) {
-        char wireId = toWireId(wire);
-        return inputWireIds.contains(wireId);
+        return Stream.of(in1, in2).anyMatch(wire -> wire.endsWith("00"));
     }
 }
