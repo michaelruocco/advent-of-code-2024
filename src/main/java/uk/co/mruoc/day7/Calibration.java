@@ -33,6 +33,9 @@ public class Calibration {
                 case '|' -> result = Long.parseLong(String.valueOf(result) + number);
                 default -> throw new IllegalArgumentException(String.format("%s operator not supported", operator));
             }
+            if (result > testValue) {
+                return result;
+            }
         }
         return result;
     }
