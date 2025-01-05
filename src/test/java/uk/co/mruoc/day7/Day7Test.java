@@ -11,29 +11,27 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class Day7Test {
 
-    private static final String EXAMPLE_PATH = "day-7/example-calibrations.txt";
-    private static final String PATH = "day-7/calibrations.txt";
-
-    private static final Collection<Character> PART_1_OPERATORS = List.of('+', '*');
-    private static final Collection<Character> PART_2_OPERATORS = List.of('+', '*', '|');
-
     @ParameterizedTest
     @MethodSource("pathAndOperatorsAndExpectedResult")
-    void shouldCalculateTotalCalibrationResult(String path, Collection<Character> operators, long expectedResult) {
-        CalibrationsLoader loader = new CalibrationsLoader(operators);
-        Calibrations calibrations = loader.load(path);
+    void shouldCalculateTotalCalibrationResult(String path, Collection<Operator> operations, long expectedResult) {
+        CalibrationsLoader loader = new CalibrationsLoader();
+        Collection<Calibration> calibrations = loader.load(path);
+        CalibrationCalculator calculator = new CalibrationCalculator(operations);
 
-        long result = calibrations.getTotalResult();
+        long result = calculator.calculate(calibrations);
 
         assertThat(result).isEqualTo(expectedResult);
     }
 
     private static Stream<Arguments> pathAndOperatorsAndExpectedResult() {
-
+        String examplePath = "day-7/example-1.txt";
+        String puzzlePath = "day-7/puzzle.txt";
+        Collection<Operator> part1Operators = List.of(new Sum(), new Multiply());
+        Collection<Operator> part2Operators = List.of(new Sum(), new Multiply(), new Concatenate());
         return Stream.of(
-                Arguments.of(EXAMPLE_PATH, PART_1_OPERATORS, 3749L),
-                Arguments.of(PATH, PART_1_OPERATORS, 5030892084481L),
-                Arguments.of(EXAMPLE_PATH, PART_2_OPERATORS, 11387L),
-                Arguments.of(PATH, PART_2_OPERATORS, 91377448644679L));
+                Arguments.of(examplePath, part1Operators, 3749L),
+                Arguments.of(puzzlePath, part1Operators, 5030892084481L),
+                Arguments.of(examplePath, part2Operators, 11387L),
+                Arguments.of(puzzlePath, part2Operators, 91377448644679L));
     }
 }

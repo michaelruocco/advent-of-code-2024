@@ -5,21 +5,13 @@ import static uk.co.mruoc.file.FileLoader.loadContentLinesFromClasspath;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class CalibrationsLoader {
 
-    private final Collection<Character> operators;
-
-    public CalibrationsLoader() {
-        this(List.of('+', '*'));
-    }
-
-    public Calibrations load(String path) {
-        return new Calibrations(loadContentLinesFromClasspath(path).stream()
+    public Collection<Calibration> load(String path) {
+        return loadContentLinesFromClasspath(path).stream()
                 .map(this::toCalibration)
-                .toList());
+                .toList();
     }
 
     public Calibration toCalibration(String line) {
@@ -27,7 +19,6 @@ public class CalibrationsLoader {
         return Calibration.builder()
                 .testValue(Long.parseLong(parts[0]))
                 .numbers(toNumbers(parts[1]))
-                .operators(operators)
                 .build();
     }
 
