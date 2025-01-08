@@ -31,9 +31,9 @@ class Day16Test {
         Maze maze = new MazeLoader().load(path);
         Reindeer reindeer = new Reindeer(maze);
 
-        Optional<Integer> score = reindeer.findLowestScore();
+        Optional<Result> result = reindeer.search();
 
-        assertThat(score).contains(expectedScore);
+        assertThat(result).map(Result::getLowestScore).contains(expectedScore);
     }
 
     @ParameterizedTest
@@ -42,9 +42,9 @@ class Day16Test {
         Maze maze = new MazeLoader().load(path);
         Reindeer reindeer = new Reindeer(maze);
 
-        Optional<Integer> numberOfTiles = reindeer.findNumberOfLocationsOnAnyBestPath();
+        Optional<Result> result = reindeer.search();
 
-        assertThat(numberOfTiles).contains(expectedNumberOfTiles);
+        assertThat(result).map(Result::getBestPathTiles).contains(expectedNumberOfTiles);
     }
 
     private static Stream<Arguments> pathAndInitialExpectedState() {

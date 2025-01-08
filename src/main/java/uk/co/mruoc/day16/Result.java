@@ -8,5 +8,5 @@ import lombok.Getter;
 public class Result {
 
     private final int lowestScore;
-    private final int bestPathLocations;
+    private final int bestPathTiles;
 }

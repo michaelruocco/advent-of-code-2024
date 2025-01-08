@@ -23,15 +23,7 @@ public class Reindeer {
         this.maze = maze;
     }
 
-    public Optional<Integer> findLowestScore() {
-        return traverse().map(Result::getLowestScore);
-    }
-
-    public Optional<Integer> findNumberOfLocationsOnAnyBestPath() {
-        return traverse().map(Result::getBestPathLocations);
-    }
-
-    private Optional<Result> traverse() {
+    public Optional<Result> search() {
         Set<Point> paths = new HashSet<>();
         int lowest = Integer.MAX_VALUE;
         Map<Move, Integer> moves = new HashMap<>();
@@ -42,16 +34,17 @@ public class Reindeer {
             State state = toVisit.poll();
             Move move = state.getMove();
             int score = state.getScore();
-            Collection<Point> path = state.getPath();
 
             if (score <= moves.getOrDefault(move, Integer.MAX_VALUE)) {
                 moves.put(move, score);
 
+                Collection<Point> path = state.getPath();
                 Point location = move.getLocation();
                 if (maze.endsAt(location)) {
                     if (score > lowest) {
                         return Optional.of(new Result(lowest, paths.size() + 1));
                     }
+
                     paths.addAll(path);
                     lowest = score;
                 }
