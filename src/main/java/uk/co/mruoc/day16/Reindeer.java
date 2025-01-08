@@ -2,88 +2,84 @@ package uk.co.mruoc.day16;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.stream.Stream;
 import uk.co.mruoc.Direction;
 import uk.co.mruoc.Maze;
+import uk.co.mruoc.Point;
 
-@RequiredArgsConstructor
 public class Reindeer {
 
     private final Maze maze;
 
-    @Getter
-    private final Move initialMove;
-
     public Reindeer(Maze maze) {
-        this(maze, new Move(maze.getStart(), Direction.EAST));
+        this.maze = maze;
     }
 
-    public long findLowestScore() {
-        return toMinScore(findEndingMoves(new DefaultScoredMove(initialMove, 0)));
+    public Optional<Integer> findLowestScore() {
+        return traverse().map(Result::getLowestScore);
     }
 
-    public long findNumberOfLocationsOnAnyBestPath() {
-        return toUniqueLocations(findEndingMoves(new PathRetainingScoredMove(initialMove, 0)));
+    public Optional<Integer> findNumberOfLocationsOnAnyBestPath() {
+        return traverse().map(Result::getBestPathLocations);
     }
 
-    private <T extends ScoredMove<T>> Collection<T> findEndingMoves(T initialMove) {
-        Queue<T> moves = new PriorityQueue<>(Comparator.comparing(ScoredMove::getScore));
-        moves.add(initialMove);
-        Set<Move> seen = new HashSet<>();
-        Set<T> endingMoves = new HashSet<>();
+    private Optional<Result> traverse() {
+        Set<Point> paths = new HashSet<>();
+        int lowest = Integer.MAX_VALUE;
+        Map<Move, Integer> moves = new HashMap<>();
+        Queue<State> toVisit = new PriorityQueue<>(Comparator.comparingInt(State::getScore));
+        toVisit.add(new State(maze.getStart(), Direction.EAST, 0));
 
-        while (!moves.isEmpty()) {
-            T currentMove = moves.poll();
-            seen.add(currentMove.getMove());
-            if (maze.endsAt(currentMove.getLocation())) {
-                endingMoves.add(currentMove);
-            }
-            long minScore = toMinScore(endingMoves);
+        while (!toVisit.isEmpty()) {
+            State state = toVisit.poll();
+            Move move = state.getMove();
+            int score = state.getScore();
+            Collection<Point> path = state.getPath();
 
-            T nextMove = currentMove.continueAhead();
-            if (nextMove.getScore() <= minScore
-                    && !seen.contains(nextMove.getMove())
-                    && maze.pathAt(nextMove.getLocation())) {
-                moves.add(nextMove);
-            }
+            if (score <= moves.getOrDefault(move, Integer.MAX_VALUE)) {
+                moves.put(move, score);
 
-            nextMove = currentMove.rotate(Direction::rotateClockwise);
-            if (nextMove.getScore() <= minScore && !seen.contains(nextMove.getMove())) {
-                moves.add(nextMove);
-            }
+                Point location = move.getLocation();
+                if (maze.endsAt(location)) {
+                    if (score > lowest) {
+                        return Optional.of(new Result(lowest, paths.size() + 1));
+                    }
+                    paths.addAll(path);
+                    lowest = score;
+                }
 
-            nextMove = currentMove.rotate(Direction::rotateAntiClockwise);
-            if (nextMove.getScore() <= minScore && !seen.contains(nextMove.getMove())) {
-                moves.add(nextMove);
+                Direction direction = move.getDirection();
+                for (ScoredDirection scoredDirection : toScoredDirections(direction)) {
+                    Direction newDirection = scoredDirection.getDirection();
+                    Point newLocation = newDirection.move(location);
+                    if (maze.pathAt(newLocation)) {
+                        int newScore = score + scoredDirection.getScore();
+                        Collection<Point> newPath = concat(path, location);
+                        toVisit.add(new State(newLocation, newDirection, newScore, newPath));
+                    }
+                }
             }
         }
-        return endingMoves;
+        return Optional.empty();
     }
 
-    private static <T extends ScoredMove<T>> long toMinScore(Collection<T> moves) {
-        return moves.stream()
-                .sorted(Comparator.comparing(ScoredMove::getScore))
-                .map(ScoredMove::getScore)
-                .findFirst()
-                .orElse(Long.MAX_VALUE);
+    private static Collection<ScoredDirection> toScoredDirections(Direction direction) {
+        int rotateScore = 1001;
+        return List.of(
+                new ScoredDirection(direction, 1),
+                new ScoredDirection(direction.rotateClockwise(), rotateScore),
+                new ScoredDirection(direction.rotateAntiClockwise(), rotateScore));
     }
 
-    private static int toUniqueLocations(Collection<PathRetainingScoredMove> moves) {
-        return moves.stream()
-                .collect(Collectors.groupingBy(ScoredMove::getScore, TreeMap::new, Collectors.toList()))
-                .firstEntry()
-                .getValue()
-                .stream()
-                .map(PathRetainingScoredMove::getPath)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet())
-                .size();
+    private static Collection<Point> concat(Collection<Point> path, Point point) {
+        return Stream.concat(path.stream(), Stream.of(point)).toList();
     }
 }

@@ -3,6 +3,7 @@ package uk.co.mruoc.day16;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.co.mruoc.file.FileLoader.loadContentFromClasspath;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -26,24 +27,24 @@ class Day16Test {
 
     @ParameterizedTest
     @MethodSource("pathAndExpectedScore")
-    void shouldFindLowestScore(String path, long expectedScore) {
+    void shouldFindLowestScore(String path, int expectedScore) {
         Maze maze = new MazeLoader().load(path);
         Reindeer reindeer = new Reindeer(maze);
 
-        long score = reindeer.findLowestScore();
+        Optional<Integer> score = reindeer.findLowestScore();
 
-        assertThat(score).isEqualTo(expectedScore);
+        assertThat(score).contains(expectedScore);
     }
 
     @ParameterizedTest
     @MethodSource("pathAndExpectedNumberOfTiles")
-    void shouldFindNumberOfTilesOnAnyBestPath(String path, long expectedNumberOfTiles) {
+    void shouldFindNumberOfTilesOnAnyBestPath(String path, int expectedNumberOfTiles) {
         Maze maze = new MazeLoader().load(path);
         Reindeer reindeer = new Reindeer(maze);
 
-        long numberOfTiles = reindeer.findNumberOfLocationsOnAnyBestPath();
+        Optional<Integer> numberOfTiles = reindeer.findNumberOfLocationsOnAnyBestPath();
 
-        assertThat(numberOfTiles).isEqualTo(expectedNumberOfTiles);
+        assertThat(numberOfTiles).contains(expectedNumberOfTiles);
     }
 
     private static Stream<Arguments> pathAndInitialExpectedState() {
@@ -56,14 +57,14 @@ class Day16Test {
 
     private static Stream<Arguments> pathAndExpectedScore() {
         return Stream.of(
-                Arguments.of(examplePath(1), 7036L),
-                Arguments.of(examplePath(2), 11048L),
-                Arguments.of(PUZZLE_PATH, 99488L));
+                Arguments.of(examplePath(1), 7036),
+                Arguments.of(examplePath(2), 11048),
+                Arguments.of(PUZZLE_PATH, 99488));
     }
 
     private static Stream<Arguments> pathAndExpectedNumberOfTiles() {
         return Stream.of(
-                Arguments.of(examplePath(1), 45L), Arguments.of(examplePath(2), 64L), Arguments.of(PUZZLE_PATH, 516));
+                Arguments.of(examplePath(1), 45), Arguments.of(examplePath(2), 64), Arguments.of(PUZZLE_PATH, 516));
     }
 
     private static String examplePath(int number) {
