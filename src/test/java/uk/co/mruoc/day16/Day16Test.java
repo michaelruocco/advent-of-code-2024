@@ -15,6 +15,8 @@ class Day16Test {
 
     private static final String PUZZLE_PATH = "day-16/puzzle.txt";
 
+    private final Reindeer reindeer = new Reindeer();
+
     @ParameterizedTest
     @MethodSource("pathAndInitialExpectedState")
     void shouldReturnInitialMapState(String path, String expectedState) {
@@ -29,9 +31,8 @@ class Day16Test {
     @MethodSource("pathAndExpectedScore")
     void shouldFindLowestScore(String path, int expectedScore) {
         Maze maze = new MazeLoader().load(path);
-        Reindeer reindeer = new Reindeer(maze);
 
-        Optional<Result> result = reindeer.search();
+        Optional<Result> result = reindeer.search(maze);
 
         assertThat(result).map(Result::getLowestScore).contains(expectedScore);
     }
@@ -40,9 +41,8 @@ class Day16Test {
     @MethodSource("pathAndExpectedNumberOfTiles")
     void shouldFindNumberOfTilesOnAnyBestPath(String path, int expectedNumberOfTiles) {
         Maze maze = new MazeLoader().load(path);
-        Reindeer reindeer = new Reindeer(maze);
 
-        Optional<Result> result = reindeer.search();
+        Optional<Result> result = reindeer.search(maze);
 
         assertThat(result).map(Result::getBestPathTiles).contains(expectedNumberOfTiles);
     }

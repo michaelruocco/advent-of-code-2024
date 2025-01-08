@@ -17,13 +17,7 @@ import uk.co.mruoc.Point;
 
 public class Reindeer {
 
-    private final Maze maze;
-
-    public Reindeer(Maze maze) {
-        this.maze = maze;
-    }
-
-    public Optional<Result> search() {
+    public Optional<Result> search(Maze maze) {
         Set<Point> paths = new HashSet<>();
         int lowest = Integer.MAX_VALUE;
         Map<Move, Integer> moves = new HashMap<>();
