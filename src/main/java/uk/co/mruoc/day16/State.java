@@ -28,4 +28,12 @@ public class State {
     public State(Move move, int score) {
         this(move, score, new ArrayList<>());
     }
+
+    public Point getLocation() {
+        return move.getLocation();
+    }
+
+    public Direction getDirection() {
+        return move.getDirection();
+    }
 }

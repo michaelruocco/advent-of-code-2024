@@ -28,34 +28,33 @@ public class Reindeer {
             State state = toVisit.poll();
             Move move = state.getMove();
             int score = state.getScore();
-
             if (score <= moves.getOrDefault(move, Integer.MAX_VALUE)) {
                 moves.put(move, score);
-
-                Collection<Point> path = state.getPath();
-                Point location = move.getLocation();
-                if (maze.endsAt(location)) {
+                if (maze.endsAt(move.getLocation())) {
                     if (score > lowest) {
                         return Optional.of(new Result(lowest, paths.size() + 1));
                     }
-
-                    paths.addAll(path);
+                    paths.addAll(state.getPath());
                     lowest = score;
                 }
-
-                Direction direction = move.getDirection();
-                for (ScoredDirection scoredDirection : toScoredDirections(direction)) {
-                    Direction newDirection = scoredDirection.getDirection();
-                    Point newLocation = newDirection.move(location);
-                    if (maze.pathAt(newLocation)) {
-                        int newScore = score + scoredDirection.getScore();
-                        Collection<Point> newPath = concat(path, location);
-                        toVisit.add(new State(newLocation, newDirection, newScore, newPath));
-                    }
-                }
+                handleNextMove(maze, toVisit, state);
             }
         }
         return Optional.empty();
+    }
+
+    private void handleNextMove(Maze maze, Collection<State> toVisit, State state) {
+        Direction direction = state.getDirection();
+        for (ScoredDirection scoredDirection : toScoredDirections(direction)) {
+            Direction newDirection = scoredDirection.getDirection();
+            Point location = state.getLocation();
+            Point newLocation = newDirection.move(location);
+            if (maze.pathAt(newLocation)) {
+                int newScore = state.getScore() + scoredDirection.getScore();
+                Collection<Point> newPath = concat(state.getPath(), location);
+                toVisit.add(new State(newLocation, newDirection, newScore, newPath));
+            }
+        }
     }
 
     private static Collection<ScoredDirection> toScoredDirections(Direction direction) {
